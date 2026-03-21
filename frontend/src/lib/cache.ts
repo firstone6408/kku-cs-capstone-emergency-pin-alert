@@ -1,4 +1,8 @@
-import { unstable_cacheLife, unstable_cacheTag } from "next/cache";
+import {
+  unstable_cacheLife,
+  unstable_cacheTag,
+  revalidateTag,
+} from "next/cache";
 
 /**
  * 🏷️ Create global cache tag
@@ -15,7 +19,7 @@ import { unstable_cacheLife, unstable_cacheTag } from "next/cache";
  * const tag = createGlobalCacheTag("user");
  * // "global:user"
  */
-export function createGlobalCacheTag(tag: string) {
+function createGlobalCacheTag(tag: string) {
   return `global:${tag}` as const;
 }
 
@@ -35,7 +39,7 @@ export function createGlobalCacheTag(tag: string) {
  * const tag = createEntityCacheTag("user", "123");
  * // "id:123-user"
  */
-export function createEntityCacheTag(tag: string, id: string) {
+function createEntityCacheTag(tag: string, id: string) {
   return `id:${id}-${tag}` as const;
 }
 
@@ -129,7 +133,7 @@ interface CachingType {
  * - ใช้ global tag สำหรับ list, entity tag สำหรับ detail
  * - ใช้ dynamic tag สำหรับ query/filter
  */
-export function applyCacheConfig({ life, tag, options }: CachingType) {
+function applyCacheConfig({ life, tag, options }: CachingType) {
   // ถ้ามี dynamic ให้สร้าง tag ใหม่ โดยเอา tag หลัก + param ที่ไม่ว่าง
   if (options?.dynamic) {
     const { paramValues, life: dynamicLife = "seconds" } = options.dynamic;
@@ -212,3 +216,10 @@ export function applyCacheConfig({ life, tag, options }: CachingType) {
 //     .map(String)
 //     .join("-");
 // }
+
+export {
+  createGlobalCacheTag,
+  createEntityCacheTag,
+  applyCacheConfig,
+  revalidateTag,
+};
