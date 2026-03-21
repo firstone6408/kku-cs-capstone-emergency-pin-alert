@@ -2,6 +2,7 @@ package com.kku.emergency_alert_api.service.auth;
 
 import org.springframework.web.server.ResponseStatusException;
 
+import com.kku.emergency_alert_api.dto.auth.CurrentUserResponseDTO;
 import com.kku.emergency_alert_api.dto.auth.LoginRequestDTO;
 import com.kku.emergency_alert_api.dto.auth.LoginResponseDTO;
 import com.kku.emergency_alert_api.dto.auth.RegisterReporterRequestDTO;
@@ -43,4 +44,12 @@ public interface AuthService {
      * @throws UnauthorizedException ถ้า email/password ไม่ถูก หรือถูก block
      */
     LoginResponseDTO loginStaff(LoginRequestDTO dto);
+
+    /**
+     * ดึงข้อมูล user ปัจจุบัน / ยืนยันตัวตน
+     *
+     * @return ข้อมูล user
+     * @throws UnauthorizedException ถ้า
+     */
+    CurrentUserResponseDTO getCurrentUser();
 }

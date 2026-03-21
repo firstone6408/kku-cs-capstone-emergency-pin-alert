@@ -10,21 +10,18 @@ import lombok.Getter;
 
 @Getter
 @Builder
-public class LoginResponseDTO {
-    private final String token;
-
+public class CurrentUserResponseDTO {
     // ข้อมูล user ที่จะส่งกลับ
     private final Long id;
     private final String email;
     private final String fullName;
     private final String phone;
-    private final UserRoleEnum role; // "REPORTER" | "STAFF"
+    private final UserRoleEnum role; // "REPORTER" | "STAFF" | "ADMIN"
     private final Boolean isBlocked;
     private final LocalDateTime createdAt;
 
-    public static LoginResponseDTO fromEntity(UserPrincipal entity, String token) {
-        return LoginResponseDTO.builder()
-                .token(token)
+    public static CurrentUserResponseDTO fromEntity(UserPrincipal entity) {
+        return CurrentUserResponseDTO.builder()
                 .id(entity.getId())
                 .email(entity.getEmail())
                 .fullName(entity.getFullName())

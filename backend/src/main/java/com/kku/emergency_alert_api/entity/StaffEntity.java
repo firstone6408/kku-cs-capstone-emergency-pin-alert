@@ -9,6 +9,8 @@ import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 import com.kku.emergency_alert_api.constant.StaffRoleEnum;
+import com.kku.emergency_alert_api.constant.UserRoleEnum;
+import com.kku.emergency_alert_api.models.UserPrincipal;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,7 +31,7 @@ import lombok.Setter;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "staff")
-public class StaffEntity {
+public class StaffEntity implements UserPrincipal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -47,8 +49,8 @@ public class StaffEntity {
 
     // บทบาท: อาสา (VOLUNTEER) / เจ้าหน้าที่ (OFFICER)
     @Enumerated(EnumType.STRING)
-    @Column(name = "role", nullable = false)
-    private StaffRoleEnum role;
+    @Column(name = "staff_role", nullable = false)
+    private StaffRoleEnum staffRole;
 
     @Column(name = "password_hash", nullable = false)
     private String passwordHash;
@@ -72,4 +74,9 @@ public class StaffEntity {
     // ความสัมพันธ์: 1 staff → หลาย snapshot ที่เคยช่วย
     @OneToMany(mappedBy = "staff")
     private List<IncidentAssignmentMemberEntity> assignmentHistory = new ArrayList<>();
+
+    @Override
+    public UserRoleEnum getRole() {
+        return UserRoleEnum.STAFF;
+    }
 }

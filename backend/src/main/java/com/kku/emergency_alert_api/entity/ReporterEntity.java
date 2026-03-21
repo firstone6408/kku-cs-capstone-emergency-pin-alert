@@ -8,6 +8,9 @@ import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.kku.emergency_alert_api.constant.UserRoleEnum;
+import com.kku.emergency_alert_api.models.UserPrincipal;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
@@ -25,7 +28,7 @@ import lombok.Setter;
 @Entity
 @EntityListeners(AuditingEntityListener.class)
 @Table(name = "reporters")
-public class ReporterEntity {
+public class ReporterEntity implements UserPrincipal {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -59,4 +62,9 @@ public class ReporterEntity {
     // ความสัมพันธ์: 1 ผู้แจ้ง → หลายรายการแจ้งเหตุ
     @OneToMany(mappedBy = "reporter")
     private List<IncidentEntity> incidents = new ArrayList<>();
+
+    @Override
+    public UserRoleEnum getRole() {
+        return UserRoleEnum.REPORTER;
+    }
 }

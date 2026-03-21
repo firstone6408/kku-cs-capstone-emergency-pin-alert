@@ -7,6 +7,8 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
 import com.kku.emergency_alert_api.constant.UserRoleEnum;
+import com.kku.emergency_alert_api.context.UserContextProvider;
+import com.kku.emergency_alert_api.dto.auth.CurrentUserResponseDTO;
 import com.kku.emergency_alert_api.dto.auth.LoginRequestDTO;
 import com.kku.emergency_alert_api.dto.auth.LoginResponseDTO;
 import com.kku.emergency_alert_api.dto.auth.RegisterReporterRequestDTO;
@@ -14,6 +16,8 @@ import com.kku.emergency_alert_api.dto.auth.RegisterStaffRequestDTO;
 import com.kku.emergency_alert_api.entity.ReporterEntity;
 import com.kku.emergency_alert_api.entity.StaffEntity;
 import com.kku.emergency_alert_api.exception.UnauthorizedException;
+import com.kku.emergency_alert_api.models.UserPrincipal;
+import com.kku.emergency_alert_api.repository.AdminRepository;
 import com.kku.emergency_alert_api.repository.ReporterRepository;
 import com.kku.emergency_alert_api.repository.StaffRepository;
 import com.kku.emergency_alert_api.util.JwtUtil;
@@ -22,18 +26,23 @@ import com.kku.emergency_alert_api.util.JwtUtil;
 public class AuthServiceImpl implements AuthService {
     private final ReporterRepository reporterRepository;
     private final StaffRepository staffRepository;
+    private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final UserContextProvider userContextProvider;
 
     public AuthServiceImpl(
             ReporterRepository reporterRepository,
             StaffRepository staffRepository,
             PasswordEncoder passwordEncoder,
-            JwtUtil jwtUtil) {
+            JwtUtil jwtUtil,
+            UserContextProvider userContextProvider, AdminRepository adminRepository) {
         this.reporterRepository = reporterRepository;
         this.staffRepository = staffRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
+        this.userContextProvider = userContextProvider;
+        this.adminRepository = adminRepository;
     }
 
     @Override
@@ -56,7 +65,7 @@ public class AuthServiceImpl implements AuthService {
         // สร้าง token (format: "id:REPORTER")
         String token = jwtUtil.generateToken(created.getId() + ":" + UserRoleEnum.REPORTER.name());
 
-        return buildReporterResponse(created, token);
+        return LoginResponseDTO.fromEntity(created, token);
     }
 
     @Override
@@ -70,7 +79,7 @@ public class AuthServiceImpl implements AuthService {
         staffToCreate.setEmail(dto.getEmail());
         staffToCreate.setFullName(dto.getFullName());
         staffToCreate.setPhone(dto.getPhone());
-        staffToCreate.setRole(dto.getRole());
+        staffToCreate.setStaffRole(dto.getStaffRole());
         staffToCreate.setPasswordHash(passwordEncoder.encode(dto.getPassword()));
 
         StaffEntity saved = staffRepository.save(staffToCreate);
@@ -78,7 +87,7 @@ public class AuthServiceImpl implements AuthService {
         // สร้าง token (format: "id:STAFF")
         String token = jwtUtil.generateToken(saved.getId() + ":" + UserRoleEnum.STAFF.name());
 
-        return buildStaffResponse(saved, token);
+        return LoginResponseDTO.fromEntity(saved, token);
     }
 
     @Override
@@ -100,7 +109,7 @@ public class AuthServiceImpl implements AuthService {
 
         String token = jwtUtil.generateToken(reporter.getId() + ":" + UserRoleEnum.REPORTER.name());
 
-        return buildReporterResponse(reporter, token);
+        return LoginResponseDTO.fromEntity(reporter, token);
     }
 
     @Override
@@ -123,34 +132,36 @@ public class AuthServiceImpl implements AuthService {
         // สร้าง token
         String token = jwtUtil.generateToken(staff.getId() + ":" + UserRoleEnum.STAFF.name());
 
-        return buildStaffResponse(staff, token);
+        return LoginResponseDTO.fromEntity(staff, token);
     }
 
-    // สร้าง LoginResponseDTO จาก ReporterEntity
-    private LoginResponseDTO buildReporterResponse(ReporterEntity entity, String token) {
-        return LoginResponseDTO.builder()
-                .token(token)
-                .id(entity.getId())
-                .email(entity.getEmail())
-                .fullName(entity.getFullName())
-                .phone(entity.getPhone())
-                .role(UserRoleEnum.REPORTER)
-                .isBlocked(entity.getIsBlocked())
-                .createdAt(entity.getCreatedAt())
-                .build();
-    }
+    @Override
+    @Transactional(readOnly = true)
+    public CurrentUserResponseDTO getCurrentUser() {
+        Long userId = userContextProvider.getCurrentUserId();
+        UserRoleEnum role = userContextProvider.getCurrentUserRole();
 
-    // สร้าง LoginResponseDTO จาก StaffEntity
-    private LoginResponseDTO buildStaffResponse(StaffEntity entity, String token) {
-        return LoginResponseDTO.builder()
-                .token(token)
-                .id(entity.getId())
-                .email(entity.getEmail())
-                .fullName(entity.getFullName())
-                .phone(entity.getPhone())
-                .role(UserRoleEnum.STAFF)
-                .isBlocked(entity.getIsBlocked())
-                .createdAt(entity.getCreatedAt())
-                .build();
+        // System.out.println("getCurrentUser: " + userId + " " + role);
+
+        UserPrincipal user = null;
+
+        switch (role) {
+            case UserRoleEnum.REPORTER:
+                user = reporterRepository.findById(userId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                break;
+            case UserRoleEnum.STAFF:
+                user = staffRepository.findById(userId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                break;
+            case UserRoleEnum.ADMIN:
+                user = adminRepository.findById(userId)
+                        .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found"));
+                break;
+            default:
+                throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
+        }
+
+        return CurrentUserResponseDTO.fromEntity(user);
     }
 }

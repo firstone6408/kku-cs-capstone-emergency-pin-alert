@@ -1,11 +1,13 @@
 package com.kku.emergency_alert_api.controller;
 
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.kku.emergency_alert_api.dto.auth.CurrentUserResponseDTO;
 import com.kku.emergency_alert_api.dto.auth.LoginRequestDTO;
 import com.kku.emergency_alert_api.dto.auth.LoginResponseDTO;
 import com.kku.emergency_alert_api.dto.auth.RegisterReporterRequestDTO;
@@ -50,5 +52,10 @@ public class AuthController {
     public ResponseEntity<ApiResponse<LoginResponseDTO>> loginStaff(
             @Valid @RequestBody LoginRequestDTO requestDTO) {
         return ApiResponse.success("Login success", authService.loginStaff(requestDTO));
+    }
+
+    @GetMapping("/current-user")
+    public ResponseEntity<ApiResponse<CurrentUserResponseDTO>> getCurrentUser() {
+        return ApiResponse.success(authService.getCurrentUser());
     }
 }

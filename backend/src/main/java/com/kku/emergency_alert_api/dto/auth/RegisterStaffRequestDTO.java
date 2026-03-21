@@ -24,8 +24,8 @@ public class RegisterStaffRequestDTO {
     @NotBlank(message = "Phone is required")
     private String phone;
 
-    @NotNull(message = "Role is required (VOLUNTEER or OFFICER)")
-    private StaffRoleEnum role;
+    @NotNull(message = "Staff Role is required (VOLUNTEER or OFFICER)")
+    private StaffRoleEnum staffRole;
 
     @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters")
