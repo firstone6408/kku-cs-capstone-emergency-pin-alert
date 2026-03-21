@@ -39,6 +39,9 @@ public class WebConfig implements WebMvcConfigurer {
                         "/api/auth/**",
                         "/swagger-ui/**",
                         "/v3/api-docs/**");
+        // AuthInterceptor — ตรวจ JWT token ใน /api/auth/current-user
+        registry.addInterceptor(authInterceptor)
+                .addPathPatterns("/api/auth/current-user");
 
         // RoleInterceptor — ตรวจ @RequireRole หลังจาก auth ผ่านแล้ว
         registry.addInterceptor(roleInterceptor)
