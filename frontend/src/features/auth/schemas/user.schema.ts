@@ -7,6 +7,11 @@ export enum UserRoleEnum {
   // ADMIN = "ADMIN",
 }
 
+export enum StaffRoleEnum {
+  VOLUNTEER = "VOLUNTEER",
+  OFFICER = "OFFICER",
+}
+
 export const userSchema = z.object({
   id: z.number(),
   email: z.string().email(),

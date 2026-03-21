@@ -13,6 +13,7 @@ import {
   loginSchema,
 } from "../schemas/login.schema";
 import { revalidateAuthUserCache } from "./auth.cache";
+import { IRegister, registerSchema } from "../schemas/register.schema";
 
 export async function login(type: UserRoleEnum, input: ILogin) {
   try {
@@ -56,8 +57,58 @@ export async function login(type: UserRoleEnum, input: ILogin) {
     await cookie.setToken(token);
 
     // clear cache
-    const user = await getCurrentUser(token);
-    if (user) revalidateAuthUserCache(result.data.id.toString());
+    revalidateAuthUserCache(result.data.id.toString());
+  } catch (error) {
+    console.error(error);
+    return {
+      message: ACTION_CONFIG.RESPONSE.ERROR.UNKNOWN,
+    };
+  }
+}
+
+export async function register(type: UserRoleEnum, input: IRegister) {
+  try {
+    // validate
+    const { success, error, data } = registerSchema.safeParse(input);
+    if (!success) {
+      return {
+        message: ACTION_CONFIG.RESPONSE.ERROR.VALIDATION,
+        error: error.flatten().fieldErrors,
+      };
+    }
+
+    // pre body
+    const requestBody = {
+      email: data.email,
+      fullName: data.fullName,
+      phone: data.phone,
+      staffRole: type,
+      password: data.password,
+    };
+
+    // api
+    const { result, error: responseError } = await handleApiRequest(
+      axios.post(
+        `${API_CONFIG.BASE_URL}/api/auth/${type.toLocaleLowerCase()}/register`,
+        requestBody,
+      ),
+      {
+        option: {
+          validateResponse: loginResponseSchema,
+        },
+      },
+    );
+
+    if (responseError.status === "error") {
+      console.error(responseError.errorMessage);
+      return {
+        message: "อีเมลนี้ถูกใช้งานไปแล้ว",
+      };
+    }
+
+    // save token
+    const token = result.data.token;
+    await cookie.setToken(token);
   } catch (error) {
     console.error(error);
     return {
