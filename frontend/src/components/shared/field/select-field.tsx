@@ -7,26 +7,45 @@ import {
 } from "@/components/ui/select";
 import { SelectFieldProps } from "@/types/components/select";
 
-interface SelectArrFieldProps extends SelectFieldProps {
-  data: string[] | Record<string, string>;
+type Option = {
+  value: string;
+  label: string;
+};
+
+interface SelectFieldUnifiedProps extends SelectFieldProps {
+  data: string[] | Record<string, string> | Option[];
 }
 
-interface SelectArrObjFieldProps extends SelectFieldProps {
-  data: {
-    value: string;
-    label: string;
-  }[];
+function normalizeData(data: SelectFieldUnifiedProps["data"]): Option[] {
+  // array of string
+  if (Array.isArray(data) && typeof data[0] === "string") {
+    return (data as string[]).map((item) => ({
+      value: item,
+      label: item,
+    }));
+  }
+
+  // array of object
+  if (Array.isArray(data)) {
+    return data as Option[];
+  }
+
+  // record
+  return Object.entries(data).map(([key, value]) => ({
+    value: key,
+    label: value,
+  }));
 }
 
-export function SelectArrField({
+export function SelectField({
   data,
   translateFn,
   placeholder,
   className,
   autoFocus,
   ...props
-}: SelectArrFieldProps) {
-  const values = Object.values(data);
+}: SelectFieldUnifiedProps) {
+  const options = normalizeData(data);
 
   return (
     <Select {...props}>
@@ -34,44 +53,10 @@ export function SelectArrField({
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
-        {values.length > 0 ? (
-          values.map((value, index) => (
-            <SelectItem key={index} value={value}>
-              {translateFn ? translateFn(value) : value}
-            </SelectItem>
-          ))
-        ) : (
-          <SelectItem
-            value="not-found"
-            className="text-red-500 font-semibold"
-            disabled
-          >
-            ไม่พบตัวเลือก
-          </SelectItem>
-        )}
-      </SelectContent>
-    </Select>
-  );
-}
-
-export function SelectArrObjField({
-  data,
-  translateFn,
-  placeholder,
-  className,
-  autoFocus,
-  ...props
-}: SelectArrObjFieldProps) {
-  return (
-    <Select {...props}>
-      <SelectTrigger className={className} autoFocus={autoFocus}>
-        <SelectValue placeholder={placeholder} />
-      </SelectTrigger>
-      <SelectContent>
-        {data.length > 0 ? (
-          data.map((value, index) => (
-            <SelectItem key={index} value={value.value}>
-              {translateFn ? translateFn(value.label) : value.label}
+        {options.length > 0 ? (
+          options.map((opt, index) => (
+            <SelectItem key={index} value={opt.value}>
+              {translateFn ? translateFn(opt.label) : opt.value}
             </SelectItem>
           ))
         ) : (
