@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
-import { Sarabun } from "next/font/google";
+import { Sarabun, Geist } from "next/font/google";
 import "@/styles/globals.css";
+import { cn } from "@/lib/utils";
+
+const geist = Geist({subsets:['latin'],variable:'--font-sans'});
 
 const sarabun = Sarabun({
   weight: ["400", "500", "600"],
@@ -40,7 +43,7 @@ export default function RootLayout({
   children,
 }: Readonly<RootLayoutProps>) {
   return (
-    <html lang="en">
+    <html lang="en" className={cn("font-sans", geist.variable)}>
       <body className={sarabun.className}>{children}</body>
     </html>
   );
