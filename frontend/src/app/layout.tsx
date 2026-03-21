@@ -2,8 +2,9 @@ import type { Metadata } from "next";
 import { Sarabun, Geist } from "next/font/google";
 import "@/styles/globals.css";
 import { cn } from "@/lib/utils";
+import { ToastContainer } from "react-toastify";
 
-const geist = Geist({subsets:['latin'],variable:'--font-sans'});
+const geist = Geist({ subsets: ["latin"], variable: "--font-sans" });
 
 const sarabun = Sarabun({
   weight: ["400", "500", "600"],
@@ -44,7 +45,10 @@ export default function RootLayout({
 }: Readonly<RootLayoutProps>) {
   return (
     <html lang="en" className={cn("font-sans", geist.variable)}>
-      <body className={sarabun.className}>{children}</body>
+      <body className={sarabun.className}>
+        <>{children}</>
+        <ToastContainer />
+      </body>
     </html>
   );
 }
