@@ -4,7 +4,7 @@ import z from "zod";
 export enum UserRoleEnum {
   REPORTER = "REPORTER",
   STAFF = "STAFF",
-  // ADMIN = "ADMIN",
+  ADMIN = "ADMIN",
 }
 
 export enum StaffRoleEnum {

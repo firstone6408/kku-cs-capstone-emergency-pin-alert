@@ -10,6 +10,8 @@ export const translateEnum = {
         return "ผู้แจ้งเหตุ";
       case "STAFF":
         return "เจ้าหน้าที่ / อาสา";
+      case "ADMIN":
+        return "ผู้ดูแลระบบ";
       default:
         return value;
     }

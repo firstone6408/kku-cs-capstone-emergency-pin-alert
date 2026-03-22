@@ -6,6 +6,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.kku.emergency_alert_api.dto.admin.AdminRequestDTO;
 import com.kku.emergency_alert_api.dto.admin.AdminResponseDTO;
+import com.kku.emergency_alert_api.dto.auth.LoginRequestDTO;
+import com.kku.emergency_alert_api.dto.auth.LoginResponseDTO;
 import com.kku.emergency_alert_api.exception.ResourceNotFoundException;
 
 /**
@@ -56,4 +58,13 @@ public interface AdminService {
      * @throws ResourceNotFoundException ถ้าไม่พบ admin
      */
     void delete(Long id);
+
+    /**
+     * ล็อกอินผู้ดูแลระบบ
+     *
+     * @param dto email + password
+     * @return token + ข้อมูล user
+     * @throws UnauthorizedException ถ้า email/password ไม่ถูก หรือถูก block
+     */
+    LoginResponseDTO loginAdmin(LoginRequestDTO requestDTO);
 }

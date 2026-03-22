@@ -37,6 +37,11 @@ public class WebConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/**") // apply ทุก endpoint
                 .excludePathPatterns( // ยกเว้น path ที่ไม่อยากดัก
                         "/api/auth/**",
+
+                        // admin
+                        "/api/admin/auth/**",
+                        "/api/admin/create-for-dev",
+
                         "/swagger-ui/**",
                         "/v3/api-docs/**");
         // AuthInterceptor — ตรวจ JWT token ใน /api/auth/current-user

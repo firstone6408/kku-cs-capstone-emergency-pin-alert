@@ -16,6 +16,8 @@ import com.kku.emergency_alert_api.annotation.RequireRole;
 import com.kku.emergency_alert_api.constant.UserRoleEnum;
 import com.kku.emergency_alert_api.dto.admin.AdminRequestDTO;
 import com.kku.emergency_alert_api.dto.admin.AdminResponseDTO;
+import com.kku.emergency_alert_api.dto.auth.LoginRequestDTO;
+import com.kku.emergency_alert_api.dto.auth.LoginResponseDTO;
 import com.kku.emergency_alert_api.service.admin.AdminService;
 import com.kku.emergency_alert_api.util.ApiResponse;
 
@@ -65,5 +67,16 @@ public class AdminController {
     public ResponseEntity<ApiResponse<String>> delete(@PathVariable Long id) {
         adminService.delete(id);
         return ApiResponse.success("Admin deleted");
+    }
+
+    @PostMapping("/create-for-dev")
+    public ResponseEntity<ApiResponse<AdminResponseDTO>> createForDev(@Valid @RequestBody AdminRequestDTO requestDTO) {
+        return ApiResponse.success("Admin created", adminService.create(requestDTO));
+    }
+
+    @PostMapping("/auth/login")
+    public ResponseEntity<ApiResponse<LoginResponseDTO>> loginAdmin(
+            @Valid @RequestBody LoginRequestDTO requestDTO) {
+        return ApiResponse.success("Login success", adminService.loginAdmin(requestDTO));
     }
 }

@@ -32,12 +32,14 @@ export async function login(type: UserRoleEnum, input: ILogin) {
       password: data.password,
     };
 
+    const endpoint =
+      type === UserRoleEnum.ADMIN
+        ? "/api/admin/auth/login"
+        : `/api/auth/${type.toLocaleLowerCase()}/login`;
+
     // api
     const { result, error: responseError } = await handleApiRequest(
-      axios.post(
-        `${API_CONFIG.BASE_URL}/api/auth/${type.toLocaleLowerCase()}/login`,
-        requestBody,
-      ),
+      axios.post(`${API_CONFIG.BASE_URL}${endpoint}`, requestBody),
       {
         option: {
           validateResponse: loginResponseSchema,

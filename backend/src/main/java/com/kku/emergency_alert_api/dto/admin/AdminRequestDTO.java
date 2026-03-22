@@ -18,6 +18,9 @@ public class AdminRequestDTO {
     @NotBlank(message = "Full name is required")
     private String fullName;
 
+    @NotBlank(message = "Phone is required")
+    private String phone;
+
     @NotBlank(message = "Password is required")
     @Size(min = 6, message = "Password must be at least 6 characters")
     private String password;

@@ -8,20 +8,27 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.kku.emergency_alert_api.constant.UserRoleEnum;
 import com.kku.emergency_alert_api.dto.admin.AdminRequestDTO;
 import com.kku.emergency_alert_api.dto.admin.AdminResponseDTO;
+import com.kku.emergency_alert_api.dto.auth.LoginRequestDTO;
+import com.kku.emergency_alert_api.dto.auth.LoginResponseDTO;
 import com.kku.emergency_alert_api.entity.AdminEntity;
 import com.kku.emergency_alert_api.exception.ResourceNotFoundException;
+import com.kku.emergency_alert_api.exception.UnauthorizedException;
 import com.kku.emergency_alert_api.repository.AdminRepository;
+import com.kku.emergency_alert_api.util.JwtUtil;
 
 @Service
 public class AdminServiceImpl implements AdminService {
     private final AdminRepository adminRepository;
     private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
 
-    public AdminServiceImpl(AdminRepository adminRepository, PasswordEncoder passwordEncoder) {
+    public AdminServiceImpl(AdminRepository adminRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
         this.adminRepository = adminRepository;
         this.passwordEncoder = passwordEncoder;
+        this.jwtUtil = jwtUtil;
     }
 
     @Override
@@ -51,6 +58,7 @@ public class AdminServiceImpl implements AdminService {
         AdminEntity adminToCreate = new AdminEntity();
         adminToCreate.setEmail(requestDTO.getEmail());
         adminToCreate.setFullName(requestDTO.getFullName());
+        adminToCreate.setPhone(requestDTO.getPhone());
         adminToCreate.setPasswordHash(encodedPassword);
 
         AdminEntity created = adminRepository.save(adminToCreate);
@@ -88,6 +96,24 @@ public class AdminServiceImpl implements AdminService {
                 .orElseThrow(() -> new ResourceNotFoundException("Admin not found with id: " + id));
 
         adminRepository.delete(adminToDelete);
+    }
+
+    @Override
+    @Transactional
+    public LoginResponseDTO loginAdmin(LoginRequestDTO requestDTO) {
+        AdminEntity admin = adminRepository.findByEmail(requestDTO.getEmail())
+                .orElseThrow(() -> new UnauthorizedException("Invalid email or password"));
+
+        // เช็ค password
+        boolean isValid = passwordEncoder.matches(requestDTO.getPassword(), admin.getPasswordHash());
+        if (!isValid) {
+            throw new UnauthorizedException("Invalid email or password");
+        }
+
+        // สร้าง token
+        String token = jwtUtil.generateToken(admin.getId() + ":" + UserRoleEnum.ADMIN.name());
+
+        return LoginResponseDTO.fromEntity(admin, token);
     }
 
 }
