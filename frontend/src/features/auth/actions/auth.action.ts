@@ -3,7 +3,7 @@
 import { actionResponse } from "@/lib/action";
 import { InitialFormState } from "@/types/actions/action";
 import { login, logout, register } from "../services/auth.service";
-import { StaffRoleEnum, UserRoleEnum } from "../schemas/user.schema";
+import { UserRoleEnum } from "../schemas/user.schema";
 
 export async function loginAction(
   _prevState: InitialFormState,
@@ -12,11 +12,10 @@ export async function loginAction(
   const rawData = {
     email: formData.get("email") as string,
     password: formData.get("password") as string,
-    loginType: formData.get("login-type") as UserRoleEnum,
+    role: formData.get("role") as UserRoleEnum,
   };
 
-  const { loginType, ...rest } = rawData;
-  const result = await login(loginType, rest);
+  const result = await login(rawData.role, rawData);
 
   if (result && result.message) {
     return actionResponse({
@@ -40,23 +39,18 @@ export async function registerAction(
     email: formData.get("email") as string,
     fullName: formData.get("full-name") as string,
     phone: formData.get("phone") as string,
-    staffRole: (() => {
-      const value = formData.get("staff-role") as StaffRoleEnum;
-      return value && value.trim() !== "" ? value : undefined;
-    })(),
     password: formData.get("password") as string,
     confirmPassword: formData.get("confirm-password") as string,
-    registerType: formData.get("register-type") as UserRoleEnum,
   };
 
-  const { registerType, ...rest } = rawData;
-  const resutl = await register(registerType, rest);
+  // Register เป็น reporter เท่านั้น
+  const result = await register(UserRoleEnum.REPORTER, rawData);
 
-  if (resutl && resutl.message) {
+  if (result && result.message) {
     return actionResponse({
       status: "expected-error",
-      message: resutl.message,
-      error: resutl.error,
+      message: result.message,
+      error: result.error,
     });
   } else {
     return actionResponse({
