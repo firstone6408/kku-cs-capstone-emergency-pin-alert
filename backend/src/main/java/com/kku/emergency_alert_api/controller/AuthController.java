@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.kku.emergency_alert_api.dto.auth.CurrentUserResponseDTO;
+import com.kku.emergency_alert_api.dto.auth.UserPrincipalResponseDTO;
 import com.kku.emergency_alert_api.dto.auth.LoginRequestDTO;
 import com.kku.emergency_alert_api.dto.auth.LoginResponseDTO;
 import com.kku.emergency_alert_api.dto.auth.RegisterReporterRequestDTO;
@@ -55,7 +55,7 @@ public class AuthController {
     }
 
     @GetMapping("/current-user")
-    public ResponseEntity<ApiResponse<CurrentUserResponseDTO>> getCurrentUser() {
+    public ResponseEntity<ApiResponse<UserPrincipalResponseDTO>> getCurrentUser() {
         return ApiResponse.success(authService.getCurrentUser());
     }
 }

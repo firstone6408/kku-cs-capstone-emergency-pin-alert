@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
+import com.kku.emergency_alert_api.constant.StaffRoleEnum;
 import com.kku.emergency_alert_api.constant.UserRoleEnum;
 import com.kku.emergency_alert_api.models.UserPrincipal;
 
@@ -55,5 +56,10 @@ public class AdminEntity implements UserPrincipal {
     @Override
     public Boolean getIsBlocked() {
         return false;
+    }
+
+    @Override
+    public StaffRoleEnum getStaffRole() {
+        return null;
     }
 }

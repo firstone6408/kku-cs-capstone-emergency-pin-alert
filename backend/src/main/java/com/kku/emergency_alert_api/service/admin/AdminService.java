@@ -4,6 +4,7 @@ import java.util.List;
 
 import org.springframework.web.server.ResponseStatusException;
 
+import com.kku.emergency_alert_api.dto.admin.AdminBlockStatusUserRequestDTO;
 import com.kku.emergency_alert_api.dto.admin.AdminRequestDTO;
 import com.kku.emergency_alert_api.dto.admin.AdminResponseDTO;
 import com.kku.emergency_alert_api.dto.auth.LoginRequestDTO;
@@ -67,4 +68,14 @@ public interface AdminService {
      * @throws UnauthorizedException ถ้า email/password ไม่ถูก หรือถูก block
      */
     LoginResponseDTO loginAdmin(LoginRequestDTO requestDTO);
+
+    /**
+     * บล็อก/ปลดบล็อกผู้ใช้งาน
+     *
+     * @param targetId   ID ของผู้ใช้งานที่ต้องการบล็อก/ปลดบล็อก
+     * @param requestDTO ข้อมูลการบล็อก/ปลดบล็อก
+     * @throws ResourceNotFoundException ถ้าไม่พบผู้ใช้งาน
+     * @throws IllegalArgumentException  ถ้าไม่สามารถบล็อก/ปลดบล็อกได้
+     */
+    void changeBlockStatusAndSaveHistory(Long targetId, AdminBlockStatusUserRequestDTO requestDTO);
 }

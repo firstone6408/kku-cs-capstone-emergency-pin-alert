@@ -8,27 +8,46 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.server.ResponseStatusException;
 
+import com.kku.emergency_alert_api.constant.BlockActionEnum;
 import com.kku.emergency_alert_api.constant.UserRoleEnum;
+import com.kku.emergency_alert_api.context.UserContextProvider;
+import com.kku.emergency_alert_api.dto.admin.AdminBlockStatusUserRequestDTO;
 import com.kku.emergency_alert_api.dto.admin.AdminRequestDTO;
 import com.kku.emergency_alert_api.dto.admin.AdminResponseDTO;
 import com.kku.emergency_alert_api.dto.auth.LoginRequestDTO;
 import com.kku.emergency_alert_api.dto.auth.LoginResponseDTO;
 import com.kku.emergency_alert_api.entity.AdminEntity;
+import com.kku.emergency_alert_api.entity.BlockHistoryEntity;
+import com.kku.emergency_alert_api.entity.ReporterEntity;
+import com.kku.emergency_alert_api.entity.StaffEntity;
 import com.kku.emergency_alert_api.exception.ResourceNotFoundException;
 import com.kku.emergency_alert_api.exception.UnauthorizedException;
 import com.kku.emergency_alert_api.repository.AdminRepository;
+import com.kku.emergency_alert_api.repository.BlockHistoryRepository;
+import com.kku.emergency_alert_api.repository.ReporterRepository;
+import com.kku.emergency_alert_api.repository.StaffRepository;
 import com.kku.emergency_alert_api.util.JwtUtil;
 
 @Service
 public class AdminServiceImpl implements AdminService {
     private final AdminRepository adminRepository;
+    private final ReporterRepository reporterRepository;
+    private final StaffRepository staffRepository;
+    private final BlockHistoryRepository blockHistoryRepository;
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
+    private final UserContextProvider userContextProvider;
 
-    public AdminServiceImpl(AdminRepository adminRepository, PasswordEncoder passwordEncoder, JwtUtil jwtUtil) {
+    public AdminServiceImpl(AdminRepository adminRepository, ReporterRepository reporterRepository,
+            StaffRepository staffRepository, BlockHistoryRepository blockHistoryRepository,
+            PasswordEncoder passwordEncoder, JwtUtil jwtUtil, UserContextProvider userContextProvider) {
         this.adminRepository = adminRepository;
+        this.reporterRepository = reporterRepository;
+        this.staffRepository = staffRepository;
+        this.blockHistoryRepository = blockHistoryRepository;
         this.passwordEncoder = passwordEncoder;
         this.jwtUtil = jwtUtil;
+        this.userContextProvider = userContextProvider;
     }
 
     @Override
@@ -114,6 +133,48 @@ public class AdminServiceImpl implements AdminService {
         String token = jwtUtil.generateToken(admin.getId() + ":" + UserRoleEnum.ADMIN.name());
 
         return LoginResponseDTO.fromEntity(admin, token);
+    }
+
+    @Override
+    @Transactional
+    public void changeBlockStatusAndSaveHistory(Long targetId, AdminBlockStatusUserRequestDTO requestDTO) {
+        if (requestDTO.getTargetType() == UserRoleEnum.ADMIN) {
+            throw new IllegalArgumentException("Cannot block admin");
+        }
+
+        switch (requestDTO.getTargetType()) {
+            case REPORTER:
+                ReporterEntity reporter = reporterRepository.findById(targetId)
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "Reporter not found with id: " + targetId));
+                reporter.setIsBlocked(requestDTO.getAction() == BlockActionEnum.BLOCK);
+
+                // update
+                reporterRepository.save(reporter);
+                break;
+            case STAFF:
+                StaffEntity staff = staffRepository.findById(targetId)
+                        .orElseThrow(() -> new ResourceNotFoundException(
+                                "Staff not found with id: " + targetId));
+                staff.setIsBlocked(requestDTO.getAction() == BlockActionEnum.BLOCK);
+
+                // update
+                staffRepository.save(staff);
+                break;
+            default:
+                throw new IllegalArgumentException("Invalid target type");
+        }
+
+        // บันทึกประวัติ
+        BlockHistoryEntity blockHistoryToCreate = new BlockHistoryEntity();
+        blockHistoryToCreate.setAdmin(adminRepository.findById(userContextProvider.getCurrentUserId())
+                .orElseThrow(() -> new ResourceNotFoundException("Admin not found")));
+        blockHistoryToCreate.setTargetType(requestDTO.getTargetType());
+        blockHistoryToCreate.setTargetId(targetId);
+        blockHistoryToCreate.setAction(requestDTO.getAction());
+        blockHistoryToCreate.setReason(requestDTO.getReason());
+
+        blockHistoryRepository.save(blockHistoryToCreate);
     }
 
 }

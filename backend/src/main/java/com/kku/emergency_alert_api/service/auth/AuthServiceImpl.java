@@ -8,7 +8,7 @@ import org.springframework.web.server.ResponseStatusException;
 
 import com.kku.emergency_alert_api.constant.UserRoleEnum;
 import com.kku.emergency_alert_api.context.UserContextProvider;
-import com.kku.emergency_alert_api.dto.auth.CurrentUserResponseDTO;
+import com.kku.emergency_alert_api.dto.auth.UserPrincipalResponseDTO;
 import com.kku.emergency_alert_api.dto.auth.LoginRequestDTO;
 import com.kku.emergency_alert_api.dto.auth.LoginResponseDTO;
 import com.kku.emergency_alert_api.dto.auth.RegisterReporterRequestDTO;
@@ -137,7 +137,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     @Transactional(readOnly = true)
-    public CurrentUserResponseDTO getCurrentUser() {
+    public UserPrincipalResponseDTO getCurrentUser() {
         Long userId = userContextProvider.getCurrentUserId();
         UserRoleEnum role = userContextProvider.getCurrentUserRole();
 
@@ -162,6 +162,6 @@ public class AuthServiceImpl implements AuthService {
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "User not found");
         }
 
-        return CurrentUserResponseDTO.fromEntity(user);
+        return UserPrincipalResponseDTO.fromEntity(user);
     }
 }

@@ -2,6 +2,7 @@ package com.kku.emergency_alert_api.models;
 
 import java.time.LocalDateTime;
 
+import com.kku.emergency_alert_api.constant.StaffRoleEnum;
 import com.kku.emergency_alert_api.constant.UserRoleEnum;
 
 public interface UserPrincipal {
@@ -18,4 +19,6 @@ public interface UserPrincipal {
     Boolean getIsBlocked();
 
     LocalDateTime getCreatedAt();
+
+    StaffRoleEnum getStaffRole();
 }

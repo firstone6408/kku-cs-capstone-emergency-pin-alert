@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
@@ -14,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.kku.emergency_alert_api.annotation.RequireRole;
 import com.kku.emergency_alert_api.constant.UserRoleEnum;
+import com.kku.emergency_alert_api.dto.admin.AdminBlockStatusUserRequestDTO;
 import com.kku.emergency_alert_api.dto.admin.AdminRequestDTO;
 import com.kku.emergency_alert_api.dto.admin.AdminResponseDTO;
 import com.kku.emergency_alert_api.dto.auth.LoginRequestDTO;
@@ -78,5 +80,13 @@ public class AdminController {
     public ResponseEntity<ApiResponse<LoginResponseDTO>> loginAdmin(
             @Valid @RequestBody LoginRequestDTO requestDTO) {
         return ApiResponse.success("Login success", adminService.loginAdmin(requestDTO));
+    }
+
+    @PatchMapping("/user/{targetId}/block-status")
+    @RequireRole({ UserRoleEnum.ADMIN })
+    public ResponseEntity<ApiResponse<String>> blockStatusUser(@PathVariable Long targetId,
+            @Valid @RequestBody AdminBlockStatusUserRequestDTO requestDTO) {
+        adminService.changeBlockStatusAndSaveHistory(targetId, requestDTO);
+        return ApiResponse.success("User blocked");
     }
 }
