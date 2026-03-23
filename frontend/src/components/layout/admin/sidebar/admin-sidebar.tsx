@@ -10,7 +10,7 @@ import {
 import Link from "next/link";
 import { ComponentProps } from "react";
 import { AdminNavMain } from "./admin-nav-main";
-import { ChartLine } from "lucide-react";
+import { ChartLine, UserIcon } from "lucide-react";
 import { AdminNavUser } from "./admin-nav-user";
 import { IUser } from "@/features/auth/schemas/user.schema";
 
@@ -20,6 +20,16 @@ const navLinks = {
       title: "Dashboard",
       url: "/admin",
       icon: ChartLine,
+    },
+    {
+      title: "เจ้าหน้าที่",
+      url: "/admin/staffs",
+      icon: UserIcon,
+    },
+    {
+      title: "ผู้แจ้งเหตุ",
+      url: "/admin/reporters",
+      icon: UserIcon,
     },
   ],
 };

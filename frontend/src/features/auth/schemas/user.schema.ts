@@ -19,6 +19,7 @@ export const userSchema = z.object({
   phone: z.string(),
 
   role: z.nativeEnum(UserRoleEnum),
+  staffRole: z.nativeEnum(StaffRoleEnum).nullable(),
   isBlocked: z.boolean(),
 
   createdAt: z.string(), // ISO string

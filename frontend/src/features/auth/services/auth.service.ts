@@ -12,8 +12,8 @@ import {
   loginResponseSchema,
   loginSchema,
 } from "../schemas/login.schema";
-import { revalidateAuthUserCache } from "./auth.cache";
 import { IRegister, registerSchema } from "../schemas/register.schema";
+import { revalidateUserCache } from "@/lib/cache/user-cache";
 
 export async function login(type: UserRoleEnum, input: ILogin) {
   try {
@@ -57,9 +57,6 @@ export async function login(type: UserRoleEnum, input: ILogin) {
     // save token
     const token = result.data.token;
     await cookie.setToken(token);
-
-    // clear cache
-    revalidateAuthUserCache(result.data.id.toString());
   } catch (error) {
     console.error(error);
     return {
@@ -111,6 +108,9 @@ export async function register(type: UserRoleEnum, input: IRegister) {
     // save token
     const token = result.data.token;
     await cookie.setToken(token);
+
+    // clear cache
+    revalidateUserCache(result.data.role, result.data.id.toString());
   } catch (error) {
     console.error(error);
     return {

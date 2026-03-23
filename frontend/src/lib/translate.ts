@@ -1,4 +1,5 @@
 import {
+  IUser,
   StaffRoleEnum,
   UserRoleEnum,
 } from "@/features/auth/schemas/user.schema";
@@ -25,5 +26,8 @@ export const translateEnum = {
       default:
         return value;
     }
+  },
+  userActiveStatus: function (user: IUser) {
+    return user.isBlocked ? "ถูกระงับ" : "ปกติ";
   },
 };
