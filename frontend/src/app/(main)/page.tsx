@@ -1,12 +1,12 @@
-import { LogoutButton } from "@/features/auth/components/logout-button";
+import { GoogleMap } from "@/components/shared/map/google-map";
 import { getAuthenticatedUser } from "@/lib/auth";
 
 export default async function HomePage() {
-  const { user } = await getAuthenticatedUser();
+  const {} = await getAuthenticatedUser();
+
   return (
-    <div>
-      <div>{user.role}</div>
-      <LogoutButton>ออกจากระบบ</LogoutButton>
+    <div className="w-full h-full">
+      <GoogleMap />
     </div>
   );
 }

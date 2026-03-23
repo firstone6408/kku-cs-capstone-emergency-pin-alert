@@ -1,11 +1,11 @@
+import { MobileHeader } from "@/components/shared/header/mobile-header";
 import {
   Card,
   CardDescription,
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { MapPin, ArrowLeft } from "lucide-react";
-import Link from "next/link";
+import { MapPin } from "lucide-react";
 
 interface AuthContainerProps {
   type: "signIn" | "signUp" | "forgot-password" | "reset-password";
@@ -39,15 +39,7 @@ export default function AuthContainer({
 
         {/* === Register: Back Arrow Header === */}
         {type === "signUp" && (
-          <div className="bg-white md:rounded-t-xl px-4 pt-6 pb-4 flex items-center gap-3 border-b border-border">
-            <Link
-              href="/auth/login"
-              className="p-1 -ml-1 rounded-lg hover:bg-muted transition-colors"
-            >
-              <ArrowLeft className="size-5 text-foreground" />
-            </Link>
-            <h1 className="text-xl font-bold text-foreground">สมัครสมาชิก</h1>
-          </div>
+          <MobileHeader title="สมัครสมาชิก" href="/auth/login" />
         )}
 
         {/* === Card Body === */}
