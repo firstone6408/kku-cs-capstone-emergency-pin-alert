@@ -1,6 +1,7 @@
-import { AdminSidebar } from "@/components/layout/admin/sidebar/admin-sidebar";
-import { ToggleThemeButton } from "@/components/shared/button/toggle-theme-button";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+import { AdminMainContent } from "@/components/layout/admin/admin-content";
+import { AdminHeader } from "@/components/layout/admin/header";
+import { AdminSidebar } from "@/components/layout/admin/sidebar";
+import { SidebarProvider } from "@/components/providers/sidebar-provider";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { UserRoleEnum } from "@/features/auth/schemas/user.schema";
 import { getAuthenticatedUser } from "@/lib/auth";
@@ -20,14 +21,13 @@ export default async function AdminLaytou({ children }: AdminLaytouProps) {
   return (
     <TooltipProvider>
       <SidebarProvider>
-        <AdminSidebar user={user} />
-        <main className="p-4 sm:p-6 space-y-4 flex-1">
-          <div className="flex items-center justify-between">
-            <SidebarTrigger />
-            <ToggleThemeButton />
+        <div className="min-h-svh flex">
+          <AdminSidebar user={user} />
+          <div className="flex-1 flex flex-col overflow-hidden ">
+            <AdminHeader />
+            <AdminMainContent>{children}</AdminMainContent>
           </div>
-          {children}
-        </main>
+        </div>
       </SidebarProvider>
     </TooltipProvider>
   );

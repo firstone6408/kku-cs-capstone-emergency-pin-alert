@@ -10,10 +10,17 @@ export function LogoutButton({ ...props }: SubmitButtonProps) {
   const { formAction, isPending } = useForm({
     action: logoutAction,
     redirectTo: "/auth/login",
+    mode: "controlled",
   });
 
   return (
-    <Form action={formAction}>
+    <Form
+      action={formAction}
+      confirmConfig={{
+        title: "ออกจากระบบ",
+        description: "คุณแน่ใจหรือไม่ว่าต้องการออกจากระบบ",
+      }}
+    >
       <SubmitButton {...props} isPending={isPending} />
     </Form>
   );
