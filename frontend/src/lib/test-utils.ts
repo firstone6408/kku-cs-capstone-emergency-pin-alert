@@ -1,3 +1,6 @@
+import { InitialFormState } from "@/types/actions/action";
+import { actionResponse } from "./action";
+
 export const testUtils = {
   /**
    * หน่วงเวลา (ms)
@@ -35,5 +38,33 @@ export const testUtils = {
   async mockFail(message = "Mock fail", delayMs = 500): Promise<never> {
     await this.delay(delayMs);
     throw new Error(message);
+  },
+
+  /**
+   * จำลอง fail action response
+   */
+  async mockActionFail(
+    message = "Mock action error",
+    delayMs = 500,
+  ): Promise<InitialFormState> {
+    await this.delay(delayMs);
+    return actionResponse({
+      status: "expected-error",
+      message,
+    });
+  },
+
+  /**
+   * จำลอง success action response
+   */
+  async mockActionSuccess(
+    message = "Mock action success",
+    delayMs = 500,
+  ): Promise<InitialFormState> {
+    await this.delay(delayMs);
+    return actionResponse({
+      status: "success",
+      message,
+    });
   },
 };

@@ -7,6 +7,7 @@ import { useSidebar } from "@/components/providers/sidebar-provider";
 import {
   LayoutDashboard,
   LogOut,
+  Proportions,
   ShieldPlus,
   Users,
   X,
@@ -30,6 +31,19 @@ const SIDE_BAR_LINKS: SidebarLinkType[] = [
     href: "/admin",
     icon: <LayoutDashboard size={20} />,
   },
+];
+
+const INCIDENT_LINKS: SidebarLinkType[] = [
+  {
+    label: "ประเภทการแจ้งเหตุ",
+    href: "/admin/incident-types",
+    icon: <Proportions size={20} />,
+  },
+  // {
+  //   label: "แจ้งเหตุ",
+  //   href: "/admin/incidents",
+  //   icon: <Proportions size={20} />,
+  // },
 ];
 
 const USER_LINKS: SidebarLinkType[] = [
@@ -127,6 +141,22 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
               {/* Menu */}
               <nav className="space-y-2">
                 {SIDE_BAR_LINKS.map((sidebarLink) => (
+                  <SidebarLink
+                    key={sidebarLink.href}
+                    label={sidebarLink.label}
+                    href={sidebarLink.href}
+                    icon={sidebarLink.icon}
+                    isActive={pathname === sidebarLink.href}
+                    onClose={() => toggleSidebar()}
+                  />
+                ))}
+
+                {/* Incident Section */}
+                <h4 className="text-sm text-muted-foreground flex items-center gap-1 pt-3">
+                  <ShieldPlus size={14} />
+                  <span>จัดการผู้ใช้</span>
+                </h4>
+                {INCIDENT_LINKS.map((sidebarLink) => (
                   <SidebarLink
                     key={sidebarLink.href}
                     label={sidebarLink.label}

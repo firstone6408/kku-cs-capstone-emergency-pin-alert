@@ -30,4 +30,20 @@ export const translateEnum = {
   userActiveStatus: function (user: IUser) {
     return user.isBlocked ? "ถูกระงับ" : "ปกติ";
   },
+  incidentTypePriorityLevel: function (value: string) {
+    switch (value) {
+      case "1":
+        return "สำคัญมาก";
+      case "2":
+        return "สำคัญ";
+      case "3":
+        return "ปานกลาง";
+      case "4":
+        return "น้อย";
+      case "5":
+        return "น้อยมาก";
+      default:
+        return value;
+    }
+  },
 };

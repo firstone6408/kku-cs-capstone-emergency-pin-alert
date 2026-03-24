@@ -5,6 +5,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { cn } from "@/lib/utils";
 import { SelectFieldProps } from "@/types/components/select";
 
 type Option = {
@@ -49,7 +50,10 @@ export function SelectField({
 
   return (
     <Select {...props}>
-      <SelectTrigger className={className} autoFocus={autoFocus}>
+      <SelectTrigger
+        className={cn("h-10!", className)}
+        autoFocus={autoFocus}
+      >
         <SelectValue placeholder={placeholder} />
       </SelectTrigger>
       <SelectContent>
