@@ -5,7 +5,7 @@ export default async function HomePage() {
   const {} = await getAuthenticatedUser();
 
   return (
-    <div className="w-full h-full">
+    <div className="size-full border border-primary rounded-md overflow-hidden">
       <GoogleMap />
     </div>
   );
