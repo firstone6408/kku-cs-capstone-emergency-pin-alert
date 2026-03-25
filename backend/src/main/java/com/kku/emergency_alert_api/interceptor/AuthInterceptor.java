@@ -10,6 +10,7 @@ import org.springframework.web.servlet.ModelAndView;
 import com.kku.emergency_alert_api.constant.UserRoleEnum;
 import com.kku.emergency_alert_api.context.UserContextProvider;
 import com.kku.emergency_alert_api.exception.UnauthorizedException;
+import com.kku.emergency_alert_api.service.auth.AuthService;
 import com.kku.emergency_alert_api.util.JwtUtil;
 
 import jakarta.servlet.http.HttpServletRequest;
@@ -33,10 +34,12 @@ public class AuthInterceptor implements HandlerInterceptor {
 
     private final JwtUtil jwtUtil;
     private final UserContextProvider userContextProvider;
+    private final AuthService authService;
 
-    public AuthInterceptor(JwtUtil jwtUtil, UserContextProvider userContextProvider) {
+    public AuthInterceptor(JwtUtil jwtUtil, UserContextProvider userContextProvider, AuthService authService) {
         this.jwtUtil = jwtUtil;
         this.userContextProvider = userContextProvider;
+        this.authService = authService;
     }
 
     /*
@@ -83,6 +86,11 @@ public class AuthInterceptor implements HandlerInterceptor {
 
             // เก็บ user context สำหรับ request นี้
             userContextProvider.setCurrentUser(userId, role);
+
+            // ตรวจสอบว่า user ถูก block หรือไม่
+            if (authService.getCurrentUser().getIsBlocked()) {
+                throw new UnauthorizedException("User is blocked");
+            }
 
             return true;
         } catch (UnauthorizedException e) {

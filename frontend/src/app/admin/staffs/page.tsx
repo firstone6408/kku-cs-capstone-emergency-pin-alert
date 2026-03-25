@@ -13,9 +13,7 @@ export default async function StaffManagementAdminPage() {
   return (
     <Fragment>
       <Header title="เจ้าหน้าที่" description="จัดการเจ้าหน้าที่" />
-
       <Separator />
-
       <StaffManagementContainer staffs={staffs} />
     </Fragment>
   );

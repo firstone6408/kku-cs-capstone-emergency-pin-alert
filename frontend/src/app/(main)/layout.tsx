@@ -1,6 +1,5 @@
 import { MainHeader } from "@/components/layout/main/header";
 import { MainSidebar } from "@/components/layout/main/sidebar";
-import { ButtonNavigation } from "@/components/layout/navigation/buttom-navigation";
 import { SidebarProvider } from "@/components/providers/sidebar-provider";
 import { UserRoleEnum } from "@/features/auth/schemas/user.schema";
 import { getAuthenticatedUser } from "@/lib/auth";
@@ -44,13 +43,7 @@ export default async function MainLayout({
 
       {/* Mobile */}
       <div className="flex sm:hidden flex-col h-screen overflow-hidden">
-        <main className="flex-1 overflow-hidden mb-16 sm:mb-0">
-          {children}
-        </main>
-        {/* Bottom Navigation (Mobile) */}
-        <nav className="shrink-0">
-          <ButtonNavigation className="fixed bottom-0 left-0 w-full z-50" />
-        </nav>
+        <main className="flex-1 overflow-y-auto">{children}</main>
       </div>
     </Fragment>
   );

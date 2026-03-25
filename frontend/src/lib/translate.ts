@@ -33,9 +33,9 @@ export const translateEnum = {
   incidentTypePriorityLevel: function (value: string) {
     switch (value) {
       case "1":
-        return "สำคัญมาก";
+        return "สูงมาก";
       case "2":
-        return "สำคัญ";
+        return "สูง";
       case "3":
         return "ปานกลาง";
       case "4":

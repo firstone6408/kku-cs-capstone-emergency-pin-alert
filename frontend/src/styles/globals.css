@@ -136,3 +136,7 @@
 .custom-input:focus-visible {
   @apply border-primary ring-2 ring-primary/20;
 }
+
+.content-with-mobile-header {
+  @apply pt-20 md:pt-0;
+}

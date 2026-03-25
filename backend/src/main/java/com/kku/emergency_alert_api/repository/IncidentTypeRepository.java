@@ -3,9 +3,11 @@ package com.kku.emergency_alert_api.repository;
 import java.util.List;
 
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.stereotype.Repository;
 
 import com.kku.emergency_alert_api.entity.IncidentTypeEntity;
 
+@Repository
 public interface IncidentTypeRepository extends JpaRepository<IncidentTypeEntity, Long> {
 
     // ดึงประเภทเหตุที่ active เรียงตาม priority (1 = สำคัญสุด)
