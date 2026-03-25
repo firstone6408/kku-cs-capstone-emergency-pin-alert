@@ -4,7 +4,7 @@ import { getIncidentTypeList } from "@/features/incident-type/services/incident-
 import { ReportIncidentContainer } from "@/features/incident/components/report/report-incident-container";
 import { getAuthenticatedUser } from "@/lib/auth";
 
-export default async function CreateReportPage() {
+export default async function CreateIncidentPage() {
   const { token, user } = await getAuthenticatedUser();
 
   const incidentTypes = await getIncidentTypeList(token);

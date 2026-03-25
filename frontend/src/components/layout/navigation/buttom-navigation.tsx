@@ -21,7 +21,7 @@ export function ButtonNavigation({ className }: ButtonNavigationProps) {
         {/* Center: Big Button */}
         <div className="absolute left-1/2 -translate-x-1/2 -top-4">
           <Link
-            href="/report/create"
+            href="/incidents"
             className="bg-white rounded-full p-4 shadow-md border-2 flex items-center justify-center"
           >
             <MapPin className="size-10 text-orange-500" />

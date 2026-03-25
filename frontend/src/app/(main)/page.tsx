@@ -1,7 +1,7 @@
 import { ButtonNavigation } from "@/components/layout/navigation/buttom-navigation";
 import { GoogleMap } from "@/components/shared/map/google-map";
 import { Button } from "@/components/ui/button";
-import { getIncidentList } from "@/features/incident/services/report-incident.service";
+import { getIncidentListByReport } from "@/features/incident/services/report-incident.service";
 import { getAuthenticatedUser } from "@/lib/auth";
 import { MapPinPlus } from "lucide-react";
 import Link from "next/link";
@@ -9,7 +9,7 @@ import Link from "next/link";
 export default async function HomePage() {
   const { token } = await getAuthenticatedUser();
 
-  const incidents = await getIncidentList(token);
+  const incidents = await getIncidentListByReport(token);
 
   // console.log(incidents);
 
@@ -21,7 +21,7 @@ export default async function HomePage() {
           size={"lg"}
           className="absolute right-3 bottom-1/3 -translate-y-1/2 z-50"
         >
-          <Link href="/reports/create">
+          <Link href="/incidents/create">
             <MapPinPlus />
           </Link>
         </Button>

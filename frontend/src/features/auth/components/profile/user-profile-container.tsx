@@ -2,14 +2,24 @@ import { LogOut, Pencil } from "lucide-react";
 import { IUser, UserRoleEnum } from "../../schemas/user.schema";
 import { LogoutButton } from "../logout-button";
 import { UpdateProfileButton } from "./update-profile-button";
+import { cn } from "@/lib/utils";
 
 interface UserProfileContainerProps {
+  className?: string;
   user: IUser;
 }
 
-export function UserProfileContainer({ user }: UserProfileContainerProps) {
+export function UserProfileContainer({
+  className,
+  user,
+}: UserProfileContainerProps) {
   return (
-    <div className="min-h-screen bg-muted/40 pb-24 overflow-y-auto max-h-60 grid grid-cols-1 md:grid-cols-2 gap-2">
+    <div
+      className={cn(
+        "min-h-screen bg-muted/40 pb-24 overflow-y-auto max-h-60 grid grid-cols-1 md:grid-cols-2 gap-2",
+        className,
+      )}
+    >
       <div>
         {/* Header */}
         <div className="bg-linear-to-br from-primary to-primary/80 px-6 pt-8 pb-10 flex flex-col items-center gap-3 text-white">

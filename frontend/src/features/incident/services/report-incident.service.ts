@@ -75,7 +75,7 @@ export async function createReportIncident(input: ICreateReportIncident) {
   }
 }
 
-export async function getIncidentList(
+export async function getIncidentListByReport(
   token: string,
 ): Promise<IIncident[]> {
   "use cache";
