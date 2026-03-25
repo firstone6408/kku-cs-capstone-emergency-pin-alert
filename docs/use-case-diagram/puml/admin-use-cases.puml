@@ -1,0 +1,33 @@
+@startuml Admin Use Cases
+
+left to right direction
+skinparam actorStyle awesome
+skinparam packageStyle rectangle
+skinparam usecase {
+    BackgroundColor #FFEBEE
+    BorderColor #F44336
+}
+
+actor "Admin" as Admin
+
+rectangle "Emergency Pin-Alert System" {
+
+    package "Authentication" {
+        usecase "Login" as UC2
+    }
+
+    package "System Administration" {
+        usecase "Manage Incident Types" as UC16
+        usecase "Manage Users\n(Block / Unblock)" as UC17
+        usecase "Review User Reports" as UC18
+    }
+}
+
+Admin --> UC2
+Admin --> UC16
+Admin --> UC17
+Admin --> UC18
+
+UC17 ..> UC18 : <<extend>>
+
+@enduml

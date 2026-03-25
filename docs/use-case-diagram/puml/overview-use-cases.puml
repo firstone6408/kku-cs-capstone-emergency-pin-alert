@@ -1,0 +1,93 @@
+@startuml Full System Use Case Diagram
+
+left to right direction
+skinparam actorStyle awesome
+skinparam packageStyle rectangle
+skinparam usecase {
+    BackgroundColor<<auth>> #E8F5E9
+    BorderColor<<auth>> #4CAF50
+    BackgroundColor<<incident>> #E3F2FD
+    BorderColor<<incident>> #2196F3
+    BackgroundColor<<team>> #FFF3E0
+    BorderColor<<team>> #FF9800
+    BackgroundColor<<chat>> #F3E5F5
+    BorderColor<<chat>> #9C27B0
+    BackgroundColor<<report>> #FCE4EC
+    BorderColor<<report>> #E91E63
+    BackgroundColor<<admin>> #FFEBEE
+    BorderColor<<admin>> #F44336
+}
+
+actor "Reporter" as Reporter
+actor "Staff / Volunteer" as Staff
+actor "Admin" as Admin
+
+rectangle "Emergency Pin-Alert System\n(Khon Kaen University)" {
+
+    package "Authentication" {
+        usecase "Register" as UC1 <<auth>>
+        usecase "Login" as UC2 <<auth>>
+        usecase "Manage Profile" as UC3 <<auth>>
+    }
+
+    package "Incident Reporting" {
+        usecase "Create Incident Report" as UC4 <<incident>>
+        usecase "Auto GPS Location" as UC5 <<incident>>
+        usecase "Upload Evidence" as UC6 <<incident>>
+        usecase "Track Incident Status" as UC7 <<incident>>
+    }
+
+    package "Team & Mission Operations" {
+        usecase "View Incident List" as UC8 <<team>>
+        usecase "Manage Team" as UC9 <<team>>
+        usecase "Accept Incident" as UC10 <<team>>
+        usecase "Request Backup Team" as UC11 <<team>>
+        usecase "Navigate to\nIncident Location" as UC12 <<team>>
+        usecase "Complete Mission" as UC13 <<team>>
+    }
+
+    package "Communication" {
+        usecase "Chat in Incident Room" as UC14 <<chat>>
+    }
+
+    package "User Report" {
+        usecase "Report User Behavior" as UC15 <<report>>
+    }
+
+    package "System Administration" {
+        usecase "Manage Incident Types" as UC16 <<admin>>
+        usecase "Manage Users\n(Block / Unblock)" as UC17 <<admin>>
+        usecase "Review User Reports" as UC18 <<admin>>
+    }
+}
+
+Reporter --> UC1
+Reporter --> UC2
+Reporter --> UC3
+Reporter --> UC4
+Reporter --> UC7
+Reporter --> UC14
+Reporter --> UC15
+
+Staff --> UC2
+Staff --> UC3
+Staff --> UC8
+Staff --> UC9
+Staff --> UC10
+Staff --> UC14
+Staff --> UC15
+
+Admin --> UC2
+Admin --> UC16
+Admin --> UC17
+Admin --> UC18
+
+UC4 ..> UC5 : <<include>>
+UC10 ..> UC12 : <<include>>
+UC10 ..> UC13 : <<include>>
+
+UC6 ..> UC4 : <<extend>>
+UC11 ..> UC10 : <<extend>>
+UC17 ..> UC18 : <<extend>>
+
+@enduml

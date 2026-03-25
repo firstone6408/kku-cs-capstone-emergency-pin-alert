@@ -1,0 +1,56 @@
+@startuml Staff Use Cases
+
+left to right direction
+skinparam actorStyle awesome
+skinparam packageStyle rectangle
+skinparam usecase {
+    BackgroundColor #FFF3E0
+    BorderColor #FF9800
+}
+
+actor "Staff / Volunteer" as Staff
+
+rectangle "Emergency Pin-Alert System" {
+
+    package "Authentication" {
+        usecase "Login" as UC2
+        usecase "Manage Profile" as UC3
+    }
+
+    package "Incident Monitoring" {
+        usecase "View Incident List" as UC8
+    }
+
+    package "Team Management" {
+        usecase "Manage Team" as UC9
+    }
+
+    package "Mission Operations" {
+        usecase "Accept Incident" as UC10
+        usecase "Request Backup Team" as UC11
+        usecase "Navigate to\nIncident Location" as UC12
+        usecase "Complete Mission" as UC13
+    }
+
+    package "Communication" {
+        usecase "Chat in Incident Room" as UC14
+    }
+
+    package "User Report" {
+        usecase "Report User Behavior" as UC15
+    }
+}
+
+Staff --> UC2
+Staff --> UC3
+Staff --> UC8
+Staff --> UC9
+Staff --> UC10
+Staff --> UC14
+Staff --> UC15
+
+UC10 ..> UC12 : <<include>>
+UC10 ..> UC13 : <<include>>
+UC11 ..> UC10 : <<extend>>
+
+@enduml
