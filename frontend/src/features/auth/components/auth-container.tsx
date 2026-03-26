@@ -38,9 +38,7 @@ export default function AuthContainer({
         )}
 
         {/* === Register: Back Arrow Header === */}
-        {type === "signUp" && (
-          <MobileHeader title="สมัครสมาชิก" href="/auth/login" />
-        )}
+        {type === "signUp" && <MobileHeader title="สมัครสมาชิก" />}
 
         {/* === Card Body === */}
         <Card
