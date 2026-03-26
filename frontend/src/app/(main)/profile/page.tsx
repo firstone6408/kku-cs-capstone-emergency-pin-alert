@@ -9,12 +9,12 @@ export default async function ProfilePage() {
 
   const incidents = await getIncidentListByUser(token, user);
 
-  console.log(incidents);
+  // console.log(incidents);
 
   return (
     <div>
       {/* Header */}
-      <MobileHeader className="flex md:hidden" title="โปรไฟล์" href="/" />
+      <MobileHeader className="flex md:hidden" title="โปรไฟล์" />
       <Header className="hidden md:flex" title="โปรไฟล์" />
       {/* Content */}
       <UserProfileContainer

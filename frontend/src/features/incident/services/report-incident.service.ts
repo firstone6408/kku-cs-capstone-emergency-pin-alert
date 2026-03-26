@@ -11,7 +11,7 @@ import {
   createApiResponseSchema,
 } from "@/lib/api-handler";
 import axios from "axios";
-import { IncidentSchema } from "../schemas/incident.schema";
+import { incidentSchema } from "../schemas/incident.schema";
 import { revalidateIncidentCache } from "./incident.cache";
 import { getCurrentUser } from "@/features/auth/services/auth.service";
 
@@ -62,7 +62,7 @@ export async function createReportIncident(input: ICreateReportIncident) {
       }),
       {
         option: {
-          validateResponse: createApiResponseSchema(IncidentSchema),
+          validateResponse: createApiResponseSchema(incidentSchema),
         },
       },
     );

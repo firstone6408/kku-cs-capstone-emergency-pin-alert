@@ -36,7 +36,6 @@ export default async function IncidentPage({
           <MobileHeader
             className="flex md:hidden"
             title="แจ้งเหตุฉุกเฉินของฉัน"
-            href="/"
           />
           <IncidentContainer
             className="content-with-mobile-header"

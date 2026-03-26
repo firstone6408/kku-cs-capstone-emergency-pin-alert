@@ -24,11 +24,7 @@ export default async function TeamManagementPage() {
   return (
     <div>
       {/* Header */}
-      <MobileHeader
-        className="flex md:hidden"
-        title="จัดการทีมของฉัน"
-        href="/"
-      />
+      <MobileHeader className="flex md:hidden" title="จัดการทีมของฉัน" />
       <Header className="hidden md:flex" title="จัดการทีมของฉัน" />
 
       {/* Content */}

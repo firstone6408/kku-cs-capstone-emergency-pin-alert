@@ -3,6 +3,8 @@ import { MobileHeader } from "@/components/shared/header/mobile-header";
 import { UserRoleEnum } from "@/features/auth/schemas/user.schema";
 import { IncidentDetailContainer } from "@/features/incident/components/container/incident-detail-container";
 import { getIncidentById } from "@/features/incident/services/incident.service";
+import { getIncidentStaffById } from "@/features/staff/services/staff-incident.service";
+import { getMyTeamStaff } from "@/features/staff/services/staff-team.service";
 import { getAuthenticatedUser } from "@/lib/auth";
 import { redirect } from "next/navigation";
 
@@ -18,26 +20,36 @@ export default async function IncidentDetailPage({
   const { token, user } = await getAuthenticatedUser();
   const { id } = await params;
 
-  const incident = await getIncidentById(token, Number(id));
+  const [incident, myTeam, incidentStaff] = await Promise.all([
+    getIncidentById(token, Number(id)),
+    getMyTeamStaff(token, user),
+    getIncidentStaffById(token, Number(id)),
+  ]);
 
   if (!incident) {
     redirect(user.role === UserRoleEnum.REPORTER ? "/incidents" : "/");
   }
+
+  // console.log(incidentStaff);
 
   return (
     <div>
       {/* Header */}
       <MobileHeader
         className="flex md:hidden"
-        title="แจ้งเหตุฉุกเฉินของฉัน"
-        href="/"
+        title="รายละเอียดการแจ้งเหตุฉุกเฉิน"
       />
-      <Header className="hidden md:flex" title="แจ้งเหตุฉุกเฉิน" />
+      <Header
+        className="hidden md:flex"
+        title="รายละเอียดการแจ้งเหตุฉุกเฉิน"
+      />
 
       {/* Content */}
       <IncidentDetailContainer
         className="content-with-mobile-header"
         incident={incident}
+        myTeam={myTeam}
+        incidentStaff={incidentStaff}
       />
     </div>
   );

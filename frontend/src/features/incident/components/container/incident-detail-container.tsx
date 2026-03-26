@@ -1,5 +1,8 @@
-import { getIncidentPriorityTheme } from "@/lib/theme";
-import { IIncident } from "../../schemas/incident.schema";
+import {
+  getIncidentPriorityTheme,
+  getIncidentStatusTheme,
+} from "@/lib/theme";
+import { IIncident, IIncidentStaff } from "../../schemas/incident.schema";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { dateTime } from "@/lib/dateTime.utils";
@@ -11,6 +14,7 @@ import {
   Check,
   MessageSquareText,
   Pill,
+  ReceiptText,
 } from "lucide-react";
 import { IncidentStatusBadge } from "../incident-status-badge";
 import { cn } from "@/lib/utils";
@@ -18,19 +22,30 @@ import {
   MediaField,
   MediaType,
 } from "@/components/shared/field/media-field";
+import { AcceptIncidentStaffButton } from "@/features/staff/components/incident/action/accept-incident-staff-button";
+import { ITeamStaff } from "@/features/staff/schemas/team/team-staff.schema";
+import Link from "next/link";
 
 interface IncidentDetailContainerProps {
   className?: string;
   incident: IIncident;
+  myTeam: ITeamStaff | null;
+  incidentStaff: IIncidentStaff | null;
 }
 
 export function IncidentDetailContainer({
   className,
   incident,
+  myTeam,
+  incidentStaff,
 }: IncidentDetailContainerProps) {
+  // console.log(incident);
+  // console.log(myTeam);
+  // console.log(incidentStaff);
   const theme = getIncidentPriorityTheme(
     incident.incidentType.priorityLevel,
   );
+  const incidentStatusTheme = getIncidentStatusTheme(incident.status);
 
   return (
     <div className={cn("p-4 space-y-3", className)}>
@@ -137,10 +152,30 @@ export function IncidentDetailContainer({
 
       {/* Action */}
       <div className="space-y-2">
-        <Button className="w-full h-12 text-base">
-          <Check />
-          รับภารกิจนี้
-        </Button>
+        {incidentStaff && incidentStaff.assignments.length != 0 ? (
+          <Button
+            size={"lg"}
+            className={cn("h-12 w-full", incidentStatusTheme.badge)}
+            asChild
+          >
+            <Link href={`/incidents/${incident.id}/in-progress`}>
+              <ReceiptText />
+              <span>ดูรายละเอียด</span>
+            </Link>
+          </Button>
+        ) : (
+          <AcceptIncidentStaffButton
+            incident={incident}
+            myTeam={myTeam}
+            size={"lg"}
+            className="h-12 w-full"
+          >
+            <span className="flex items-center gap-2">
+              <Check />
+              <span>รับรายการแจ้งเหตุนี้</span>
+            </span>
+          </AcceptIncidentStaffButton>
+        )}
 
         <Button variant="outline" className="w-full h-12 text-base">
           <MessageSquareText />

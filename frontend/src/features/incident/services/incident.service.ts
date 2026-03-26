@@ -7,7 +7,7 @@ import {
 import { applyCacheConfig } from "@/lib/cache";
 import axios from "axios";
 import z from "zod";
-import { IIncident, IncidentSchema } from "../schemas/incident.schema";
+import { IIncident, incidentSchema } from "../schemas/incident.schema";
 import {
   getIncidentGlobalTag,
   getIncidentIdTag,
@@ -32,7 +32,7 @@ export async function getIncidentById(
       }),
       {
         option: {
-          validateResponse: createApiResponseSchema(IncidentSchema),
+          validateResponse: createApiResponseSchema(incidentSchema),
         },
       },
     );
@@ -75,7 +75,7 @@ export async function getIncidentListByUser(
       {
         option: {
           validateResponse: createApiResponseSchema(
-            z.array(IncidentSchema),
+            z.array(incidentSchema),
           ),
         },
       },

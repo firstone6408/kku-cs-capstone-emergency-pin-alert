@@ -12,11 +12,7 @@ export default async function CreateIncidentPage() {
   return (
     <div>
       {/* Header */}
-      <MobileHeader
-        className="flex md:hidden"
-        title="แจ้งเหตุฉุกเฉิน"
-        href="/"
-      />
+      <MobileHeader className="flex md:hidden" title="แจ้งเหตุฉุกเฉิน" />
       <Header className="hidden md:flex" title="แจ้งเหตุฉุกเฉิน" />
 
       {/* Content */}

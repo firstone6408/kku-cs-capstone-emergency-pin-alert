@@ -1,19 +1,26 @@
+"use client";
+
 import { cn } from "@/lib/utils";
 import { ArrowLeft } from "lucide-react";
-import Link from "next/link";
 import { ToggleThemeButton } from "../button/toggle-theme-button";
+import { useRouter } from "next/navigation";
 
 interface MobileHeaderProps {
   className?: string;
   title: string;
-  href?: string;
 }
 
 export function MobileHeader({
   className,
   title,
-  href,
+  // href,
 }: MobileHeaderProps) {
+  const router = useRouter();
+
+  const handleBack = () => {
+    router.back();
+  };
+
   return (
     <div
       className={cn(
@@ -22,14 +29,12 @@ export function MobileHeader({
       )}
     >
       <div className="flex items-center gap-2">
-        {href && (
-          <Link
-            href={href}
-            className="p-1 -ml-1 rounded-lg hover:bg-muted transition-colors"
-          >
-            <ArrowLeft className="size-5 text-foreground" />
-          </Link>
-        )}
+        <button
+          onClick={handleBack}
+          className="p-1 -ml-1 rounded-lg hover:bg-muted transition-colors"
+        >
+          <ArrowLeft className="size-5 text-foreground" />
+        </button>
 
         <h1 className="text-xl font-bold text-foreground">{title}</h1>
       </div>

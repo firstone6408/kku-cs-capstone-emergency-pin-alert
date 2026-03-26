@@ -1,5 +1,6 @@
 import { userSchema } from "@/features/auth/schemas/user.schema";
 import { incidentTypeSchema } from "@/features/incident-type/schemas/incident-type.schema";
+import { teamStaffSchema } from "@/features/staff/schemas/team/team-staff.schema";
 import { z } from "zod";
 
 export enum IncidentStatusEnum {
@@ -10,6 +11,12 @@ export enum IncidentStatusEnum {
   CANCELLED = "CANCELLED",
 }
 
+export enum AssignmentStatusEnum {
+  ACCEPTED = "ACCEPTED", // ทีมรับงาน
+  COMPLETED = "COMPLETED", // ทีมทำเสร็จ
+  CANCELLED = "CANCELLED", // ทีมยกเลิก
+}
+
 const EvidenceSchema = z.object({
   id: z.number(),
   fileType: z.string(),
@@ -18,7 +25,7 @@ const EvidenceSchema = z.object({
   fileSize: z.number(),
 });
 
-export const IncidentSchema = z.object({
+export const incidentSchema = z.object({
   id: z.number(),
   incidentCode: z.string(),
 
@@ -44,4 +51,18 @@ export const IncidentSchema = z.object({
   updatedAt: z.string(),
 });
 
-export type IIncident = z.infer<typeof IncidentSchema>;
+const assignmentSchema = z.object({
+  id: z.number(),
+  team: teamStaffSchema,
+  status: z.nativeEnum(AssignmentStatusEnum),
+});
+
+export const incidenStaffSchema = z.object({
+  incident: incidentSchema,
+  assignments: z.array(assignmentSchema),
+  currentTeams: z.number().nullable(),
+});
+
+export type IIncident = z.infer<typeof incidentSchema>;
+
+export type IIncidentStaff = z.infer<typeof incidenStaffSchema>;

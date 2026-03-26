@@ -79,7 +79,7 @@ export async function createTeamStaff(input: ICreateTeamStaff) {
     if (responseError.status === "error") {
       console.error(responseError.errorMessage);
       return {
-        message: ACTION_CONFIG.RESPONSE.ERROR.UNKNOWN,
+        message: responseError.errorMessage,
       };
     }
 
@@ -138,7 +138,7 @@ export async function joinTeamStaff(input: IJoinTeamStaff) {
     if (errorResponse.status === "error") {
       console.error(errorResponse.errorMessage);
       return {
-        message: ACTION_CONFIG.RESPONSE.ERROR.UNKNOWN,
+        message: errorResponse.errorMessage,
       };
     }
 
@@ -179,7 +179,7 @@ export async function leaveTeamStaff() {
     if (errorResponse.status === "error") {
       console.error(errorResponse.errorMessage);
       return {
-        message: ACTION_CONFIG.RESPONSE.ERROR.UNKNOWN,
+        message: errorResponse.errorMessage,
       };
     }
 
