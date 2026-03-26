@@ -22,7 +22,6 @@ export default async function ProfilePage() {
         user={user}
         incidents={incidents}
       />
-      ;
     </div>
   );
 }

@@ -10,9 +10,44 @@ import z from "zod";
 import { IIncident, IncidentSchema } from "../schemas/incident.schema";
 import {
   getIncidentGlobalTag,
+  getIncidentIdTag,
   getIncidentReporterGlobalTag,
 } from "./incident.cache";
 import { IUser, UserRoleEnum } from "@/features/auth/schemas/user.schema";
+
+export async function getIncidentById(
+  token: string,
+  id: number,
+): Promise<IIncident | null> {
+  "use cache";
+  applyCacheConfig({
+    life: "minutes",
+    tag: getIncidentIdTag(id.toString()),
+  });
+
+  try {
+    const { result, error } = await handleApiRequest(
+      axios.get(`${API_CONFIG.BASE_URL}/api/incidents/${id}`, {
+        headers: buildHeaders({ token }),
+      }),
+      {
+        option: {
+          validateResponse: createApiResponseSchema(IncidentSchema),
+        },
+      },
+    );
+
+    if (error.status === "error") {
+      console.error(error.errorMessage);
+      return null;
+    }
+
+    return result.data;
+  } catch (error) {
+    console.error(error);
+    return null;
+  }
+}
 
 export async function getIncidentListByUser(
   token: string,

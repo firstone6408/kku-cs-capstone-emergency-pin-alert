@@ -4,6 +4,7 @@ import {
   UserRoleEnum,
 } from "@/features/auth/schemas/user.schema";
 import { IncidentStatusEnum } from "@/features/incident/schemas/incident.schema";
+import { TeamStaffStatusEnum } from "@/features/staff/schemas/team/team-staff.schema";
 
 export const translateEnum = {
   userRoleEnum: function (value: UserRoleEnum) {
@@ -61,6 +62,16 @@ export const translateEnum = {
         return "ยกเลิก";
       case "ALL":
         return "ทั้งหมด";
+      default:
+        return value;
+    }
+  },
+  teamStaffStatusEnum: function (value: TeamStaffStatusEnum) {
+    switch (value) {
+      case "AVAILABLE":
+        return "ว่าง";
+      case "ON_MISSION":
+        return "กำลังปฏิบัติงาน";
       default:
         return value;
     }

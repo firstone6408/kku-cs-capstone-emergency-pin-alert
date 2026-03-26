@@ -74,6 +74,7 @@ public class IncidentServiceImpl implements IncidentService {
 
         // สร้าง incident
         IncidentEntity incidentToCreate = new IncidentEntity();
+        incidentToCreate.setIncidentCode(generateIncidentCode());
         incidentToCreate.setReporter(reporter);
         incidentToCreate.setIncidentType(incidentType);
         incidentToCreate.setDescription(dto.getDescription());
@@ -112,4 +113,11 @@ public class IncidentServiceImpl implements IncidentService {
         return IncidentResponseDTO.fromEntity(savedIncident);
     }
 
+    private String generateIncidentCode() {
+        Long maxId = incidentRepository.findMaxId();
+
+        long nextId = (maxId == null) ? 1 : maxId + 1;
+
+        return String.format("INC-%05d", nextId);
+    }
 }

@@ -60,7 +60,7 @@ export function ConfirmModal({
       open={open}
       onOpenChange={onOpenChange}
       className={className}
-      title={`ยืนยันที่จะ ${title} หรือไม่?`}
+      title={`ยืนยันที่จะ${title}หรือไม่?`}
       description={description || ""}
     >
       {confirmationTextRequired && (

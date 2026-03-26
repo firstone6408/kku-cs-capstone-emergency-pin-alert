@@ -24,4 +24,7 @@ public interface IncidentRepository extends JpaRepository<IncidentEntity, Long> 
     List<IncidentEntity> findByReporterIdOrderByStatusAndCreatedAtDesc(Long reporterId);
 
     List<IncidentEntity> findAllByOrderByStatusAscCreatedAtDesc();
+
+    @Query("SELECT MAX(i.id) FROM IncidentEntity i")
+    Long findMaxId();
 }

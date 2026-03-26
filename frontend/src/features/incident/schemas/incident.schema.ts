@@ -1,3 +1,4 @@
+import { userSchema } from "@/features/auth/schemas/user.schema";
 import { incidentTypeSchema } from "@/features/incident-type/schemas/incident-type.schema";
 import { z } from "zod";
 
@@ -19,6 +20,7 @@ const EvidenceSchema = z.object({
 
 export const IncidentSchema = z.object({
   id: z.number(),
+  incidentCode: z.string(),
 
   incidentType: incidentTypeSchema,
 
@@ -36,6 +38,7 @@ export const IncidentSchema = z.object({
   maxTeams: z.number(),
 
   evidence: z.array(EvidenceSchema),
+  reporter: userSchema,
 
   createdAt: z.string(),
   updatedAt: z.string(),

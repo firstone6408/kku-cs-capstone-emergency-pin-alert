@@ -3,9 +3,10 @@ import { IIncident } from "../../schemas/incident.schema";
 import { IUser } from "@/features/auth/schemas/user.schema";
 import { IncidentStat } from "../incident-stat";
 import { Button } from "@/components/ui/button";
-import { Bell } from "lucide-react";
+import { Bell, Users } from "lucide-react";
 import { IncidentStatusTabSearchQuery } from "../incident-status-tab-search-query";
 import { IncidentCard } from "../incident-card";
+import Link from "next/link";
 
 interface IncidentManagementContainerProps {
   className?: string;
@@ -47,8 +48,11 @@ export function IncidentManagementContainer({
         <div className="flex justify-between items-center">
           <h2 className="font-semibold text-lg">รายการแจ้งเหตุ</h2>
 
-          <Button variant="outline" size="sm">
-            🔍 ค้นหา
+          <Button variant="outline" size="sm" asChild>
+            <Link href="/teams">
+              <Users />
+              <span>ทีมของฉัน</span>
+            </Link>
           </Button>
         </div>
 
@@ -56,7 +60,7 @@ export function IncidentManagementContainer({
         <div>
           <IncidentStatusTabSearchQuery
             className="w-full"
-            currentPath="/"
+            currentPath="/incidents"
             query="status"
           />
         </div>

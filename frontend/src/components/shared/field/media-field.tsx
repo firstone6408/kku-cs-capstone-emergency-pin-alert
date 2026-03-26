@@ -10,7 +10,7 @@ import { Button } from "@/components/ui/button";
 import { ErrorActionType } from "@/types/actions/action";
 import Swal from "sweetalert2";
 
-type MediaType = "image" | "video" | "audio";
+export type MediaType = "image" | "video" | "audio";
 
 interface ExistingMedia {
   id: string;

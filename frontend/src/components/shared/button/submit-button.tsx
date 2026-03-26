@@ -11,6 +11,8 @@ export function SubmitButton({
   ...props
 }: SubmitButtonProps) {
   const Icon = icon;
+  const hasIcon = !!Icon;
+
   return (
     <Button
       type="submit"
@@ -18,12 +20,23 @@ export function SubmitButton({
       disabled={isPending}
       {...props}
     >
-      {isPending ? (
+      {/* มี icon */}
+      {hasIcon && (
+        <>
+          {isPending ? (
+            <Loader2 size={16} className="animate-spin" />
+          ) : (
+            <Icon size={16} />
+          )}
+        </>
+      )}
+
+      {/* ไม่มี icon */}
+      {!hasIcon && isPending ? (
         <Loader2 size={16} className="animate-spin" />
       ) : (
-        <>{Icon && <Icon size={16} />}</>
+        children && <span>{children}</span>
       )}
-      {children && <span>{children}</span>}
     </Button>
   );
 }

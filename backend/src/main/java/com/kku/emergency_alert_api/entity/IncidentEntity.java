@@ -48,6 +48,10 @@ public class IncidentEntity {
     @Column(name = "id")
     private Long id;
 
+    // รหัสเหตุฉุกเฉิน
+    @Column(name = "incident_code", nullable = false, unique = true)
+    private String incidentCode;
+
     // ผู้แจ้งเหตุ
     @ManyToOne
     @JoinColumn(name = "reporter_id", nullable = false)

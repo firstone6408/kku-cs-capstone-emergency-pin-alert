@@ -1,7 +1,5 @@
 import type { NextConfig } from "next";
 
-const hostname = "ik.imagekit.io";
-
 const nextConfig: NextConfig = {
   /* config options here */
   experimental: {
@@ -13,8 +11,8 @@ const nextConfig: NextConfig = {
   images: {
     remotePatterns: [
       {
-        protocol: process.env.NODE_ENV === "production" ? "https" : "http",
-        hostname: hostname,
+        protocol: "https",
+        hostname: process.env.NEXT_PUBLIC_IMAGE_KIT_URL!,
       },
     ],
   },

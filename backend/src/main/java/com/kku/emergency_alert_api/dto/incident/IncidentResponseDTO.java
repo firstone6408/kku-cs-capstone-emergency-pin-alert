@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 import com.kku.emergency_alert_api.constant.IncidentStatusEnum;
+import com.kku.emergency_alert_api.dto.auth.UserPrincipalResponseDTO;
 import com.kku.emergency_alert_api.dto.incident_type.IncidentTypeResponseDTO;
 import com.kku.emergency_alert_api.entity.IncidentEntity;
 
@@ -16,6 +17,7 @@ import lombok.Getter;
 @Builder
 public class IncidentResponseDTO {
     private final Long id;
+    private final String incidentCode;
 
     // ข้อมูลประเภทเหตุ
     private final IncidentTypeResponseDTO incidentType;
@@ -31,12 +33,15 @@ public class IncidentResponseDTO {
     // หลักฐาน
     private final List<IncidentEvidenceResponseDTO> evidence;
 
+    private final UserPrincipalResponseDTO reporter;
+
     private final LocalDateTime createdAt;
     private final LocalDateTime updatedAt;
 
     public static IncidentResponseDTO fromEntity(IncidentEntity entity) {
         return IncidentResponseDTO.builder()
                 .id(entity.getId())
+                .incidentCode(entity.getIncidentCode())
                 .incidentType(IncidentTypeResponseDTO.fromEntity(entity.getIncidentType()))
                 .description(entity.getDescription())
                 .contactPhone(entity.getContactPhone())
@@ -52,6 +57,7 @@ public class IncidentResponseDTO {
                                 .map(IncidentEvidenceResponseDTO::fromEntity)
                                 .toList()
                         : List.of())
+                .reporter(UserPrincipalResponseDTO.fromEntity(entity.getReporter()))
                 .build();
     }
 }
