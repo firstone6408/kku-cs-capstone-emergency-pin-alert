@@ -14,4 +14,8 @@ public interface IncidentService {
 
     // ดูรายการแจ้งเหตุของ reporter
     List<IncidentResponseDTO> getAllByReporter(Long reporterId);
+
+    // ดูรายการแจ้งเหตุของ staff
+    List<IncidentResponseDTO> getAll();
+
 }

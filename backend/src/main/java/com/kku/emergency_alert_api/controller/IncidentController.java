@@ -43,6 +43,11 @@ public class IncidentController {
         return ApiResponse.success(incidentService.getAllByReporter(userContextProvider.getCurrentUserId()));
     }
 
+    @GetMapping
+    public ResponseEntity<ApiResponse<List<IncidentResponseDTO>>> getAll() {
+        return ApiResponse.success(incidentService.getAll());
+    }
+
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     @RequireRole({ UserRoleEnum.REPORTER })
     public ResponseEntity<ApiResponse<IncidentResponseDTO>> createReportIncident(

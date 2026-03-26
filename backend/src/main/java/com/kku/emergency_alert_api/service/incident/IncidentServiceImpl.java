@@ -55,6 +55,13 @@ public class IncidentServiceImpl implements IncidentService {
     }
 
     @Override
+    @Transactional(readOnly = true)
+    public List<IncidentResponseDTO> getAll() {
+        List<IncidentEntity> incidents = incidentRepository.findAllByOrderByStatusAscCreatedAtDesc();
+        return incidents.stream().map(IncidentResponseDTO::fromEntity).toList();
+    }
+
+    @Override
     @Transactional
     public IncidentResponseDTO create(Long reporterId, IncidentRequestDTO dto) {
         // หา reporter

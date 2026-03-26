@@ -1,7 +1,7 @@
 import { Header } from "@/components/shared/header/header";
 import { MobileHeader } from "@/components/shared/header/mobile-header";
-import { IncidentContainer } from "@/features/incident/components/incident-container";
-import { getIncidentListByReport } from "@/features/incident/services/report-incident.service";
+import { IncidentContainer } from "@/features/incident/components/container/incident-container";
+import { getIncidentListByUser } from "@/features/incident/services/incident.service";
 import { getAuthenticatedUser } from "@/lib/auth";
 
 interface IncidentPageProps {
@@ -11,11 +11,11 @@ interface IncidentPageProps {
 export default async function IncidentPage({
   searchParams,
 }: IncidentPageProps) {
-  const { token } = await getAuthenticatedUser();
+  const { token, user } = await getAuthenticatedUser();
 
   const { status } = await searchParams;
 
-  let incidents = await getIncidentListByReport(token);
+  let incidents = await getIncidentListByUser(token, user);
 
   if (status && status !== "ALL") {
     incidents = incidents.filter((incident) => incident.status === status);

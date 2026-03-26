@@ -14,7 +14,15 @@ export function getIncidentGlobalTag() {
   return createGlobalCacheTag(INCIDENT_TAG);
 }
 
-export function revalidateIncidentCache(incidentId: string) {
+export function getIncidentReporterGlobalTag(reporterId: string) {
+  return createGlobalCacheTag(`${INCIDENT_TAG}:${reporterId}`);
+}
+
+export function revalidateIncidentCache(
+  incidentId: string,
+  reporterId: string,
+) {
   revalidateTag(getIncidentIdTag(incidentId));
   revalidateTag(getIncidentGlobalTag());
+  revalidateTag(getIncidentReporterGlobalTag(reporterId));
 }

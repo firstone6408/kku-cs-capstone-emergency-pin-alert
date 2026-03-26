@@ -3,16 +3,37 @@ import { IUser, UserRoleEnum } from "../../schemas/user.schema";
 import { LogoutButton } from "../logout-button";
 import { UpdateProfileButton } from "./update-profile-button";
 import { cn } from "@/lib/utils";
+import {
+  IIncident,
+  IncidentStatusEnum,
+} from "@/features/incident/schemas/incident.schema";
 
 interface UserProfileContainerProps {
   className?: string;
   user: IUser;
+  incidents: IIncident[];
 }
 
 export function UserProfileContainer({
   className,
   user,
+  incidents,
 }: UserProfileContainerProps) {
+  const incidentsCompleted = incidents.reduce(
+    (acc, incident) => {
+      switch (incident.status) {
+        case IncidentStatusEnum.COMPLETED:
+          acc.completed += 1;
+          break;
+      }
+      return acc;
+    },
+    {
+      completed: 0,
+    },
+  ).completed;
+  const incidentsTotal = incidents.length;
+
   return (
     <div
       className={cn(
@@ -44,14 +65,18 @@ export function UserProfileContainer({
         {/* Stats */}
         <div className="px-4 -mt-6 flex gap-3">
           <div className="flex-1 bg-background dark:bg-muted rounded-2xl shadow p-4 text-center">
-            <p className="text-primary text-2xl font-bold">12</p>
+            <p className="text-primary text-2xl font-bold">
+              {incidentsTotal}
+            </p>
             <p className="text-muted-foreground text-sm">
               แจ้งเหตุทั้งหมด
             </p>
           </div>
 
           <div className="flex-1 bg-background dark:bg-muted rounded-2xl shadow p-4 text-center">
-            <p className="text-green-500 text-2xl font-bold">11</p>
+            <p className="text-green-500 text-2xl font-bold">
+              {incidentsCompleted}
+            </p>
             <p className="text-muted-foreground text-sm">เสร็จสิ้น</p>
           </div>
         </div>

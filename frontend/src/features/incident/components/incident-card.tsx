@@ -12,6 +12,9 @@ import { dateTime } from "@/lib/dateTime.utils";
 import { format } from "@/lib/format";
 import { cn } from "@/lib/utils";
 import { getIncidentPriorityTheme } from "@/lib/theme";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
+import { ClipboardCopy } from "lucide-react";
 
 interface IncidentCardProps {
   incident: IIncident;
@@ -42,9 +45,19 @@ export function IncidentCard({ incident }: IncidentCardProps) {
       <CardContent className="font-bold text-lg">
         {incident.description}
       </CardContent>
-      <CardFooter className="text-muted-foreground flex justify-between items-center">
-        <p>📍 {format.truncateText(incident.address, 22)}</p>
-        <p>{dateTime.getRelativeTime(new Date(incident.createdAt))}</p>
+      <CardFooter className="text-muted-foreground flex justify-between items-start">
+        <span className="flex flex-col justify-end items-start gap-3">
+          <p>📍 {format.truncateText(incident.address, 22)}</p>
+          <p>📞 {incident.contactPhone}</p>
+        </span>
+        <span className="flex flex-col items-end">
+          <p>{dateTime.getRelativeTime(new Date(incident.createdAt))}</p>
+          <Button variant={"default"} size={"icon-lg"} asChild>
+            <Link href={`/incidents/${incident.id}`}>
+              <ClipboardCopy />
+            </Link>
+          </Button>
+        </span>
       </CardFooter>
     </Card>
   );

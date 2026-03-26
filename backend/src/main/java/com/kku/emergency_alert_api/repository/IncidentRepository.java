@@ -22,4 +22,6 @@ public interface IncidentRepository extends JpaRepository<IncidentEntity, Long> 
                     i.createdAt DESC
             """)
     List<IncidentEntity> findByReporterIdOrderByStatusAndCreatedAtDesc(Long reporterId);
+
+    List<IncidentEntity> findAllByOrderByStatusAscCreatedAtDesc();
 }

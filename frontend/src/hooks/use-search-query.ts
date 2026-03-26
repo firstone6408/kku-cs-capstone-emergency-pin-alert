@@ -1,18 +1,14 @@
 import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useDebounce } from "./use-debounce";
+import { UseSearchQueryParams } from "@/types/hooks/use-search-query";
 
 export function useSearchQuery({
   query,
   currentPath,
   defaultValues,
   delay = 1000,
-}: {
-  query: string;
-  currentPath: string;
-  defaultValues?: string[];
-  delay?: number;
-}) {
+}: UseSearchQueryParams) {
   const searchParams = useSearchParams();
   const router = useRouter();
 

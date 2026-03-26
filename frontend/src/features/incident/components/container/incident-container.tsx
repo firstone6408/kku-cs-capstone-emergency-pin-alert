@@ -1,7 +1,7 @@
-import { IIncident } from "../schemas/incident.schema";
+import { IIncident } from "../../schemas/incident.schema";
 import { cn } from "@/lib/utils";
-import { IncidentStatusTabSearch } from "./incident-status-tab-search";
-import { IncidentCard } from "./incident-card";
+import { IncidentStatusTabSearchQuery } from "../incident-status-tab-search-query";
+import { IncidentCard } from "../incident-card";
 import { ScrollArea } from "@/components/ui/scroll-area";
 
 interface IncidentContainerProps {
@@ -16,7 +16,10 @@ export function IncidentContainer({
   return (
     <div className={cn(className)}>
       {/* filter incident by status */}
-      <IncidentStatusTabSearch />
+      <IncidentStatusTabSearchQuery
+        currentPath="/incidents"
+        query="status"
+      />
 
       {/* list of incidents */}
       <ScrollArea className="p-4 overflow-y-auto h-[calc(100vh-150px)]">

@@ -11,18 +11,26 @@ import {
   createApiResponseSchema,
 } from "@/lib/api-handler";
 import axios from "axios";
-import { IIncident, IncidentSchema } from "../schemas/incident.schema";
-import {
-  getIncidentGlobalTag,
-  revalidateIncidentCache,
-} from "./incident.cache";
-import { applyCacheConfig } from "@/lib/cache";
-import z from "zod";
+import { IncidentSchema } from "../schemas/incident.schema";
+import { revalidateIncidentCache } from "./incident.cache";
+import { getCurrentUser } from "@/features/auth/services/auth.service";
 
 export async function createReportIncident(input: ICreateReportIncident) {
   try {
     // get token
     const token = await cookie.getToken();
+    if (!token) {
+      return {
+        message: ACTION_CONFIG.RESPONSE.ERROR.UNAUTHORIZED,
+      };
+    }
+    // get user
+    const user = await getCurrentUser(token);
+    if (!user) {
+      return {
+        message: ACTION_CONFIG.RESPONSE.ERROR.UNAUTHORIZED,
+      };
+    }
 
     // validate
     const { success, error, data } =
@@ -67,47 +75,11 @@ export async function createReportIncident(input: ICreateReportIncident) {
     }
 
     // clear cache
-    revalidateIncidentCache(result.data.id.toString());
+    revalidateIncidentCache(result.data.id.toString(), user.id.toString());
   } catch (error) {
     console.error(error);
     return {
       message: ACTION_CONFIG.RESPONSE.ERROR.UNKNOWN,
     };
-  }
-}
-
-export async function getIncidentListByReport(
-  token: string,
-): Promise<IIncident[]> {
-  "use cache";
-  applyCacheConfig({
-    life: "minutes",
-    tag: getIncidentGlobalTag(),
-  });
-
-  try {
-    // api
-    const { result, error } = await handleApiRequest(
-      axios.get(`${API_CONFIG.BASE_URL}/api/incidents/reporter`, {
-        headers: buildHeaders({ token }),
-      }),
-      {
-        option: {
-          validateResponse: createApiResponseSchema(
-            z.array(IncidentSchema),
-          ),
-        },
-      },
-    );
-
-    if (error.status === "error") {
-      console.error(error.errorMessage);
-      return [];
-    }
-
-    return result.data;
-  } catch (error) {
-    console.error(error);
-    return [];
   }
 }

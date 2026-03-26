@@ -4,15 +4,21 @@ import { TabField } from "@/components/shared/field/tab-field";
 import { useSearchQuery } from "@/hooks/use-search-query";
 import { IncidentStatusEnum } from "../schemas/incident.schema";
 import { translateEnum } from "@/lib/translate";
+import { UseSearchQueryParams } from "@/types/hooks/use-search-query";
 
-export function IncidentStatusTabSearch() {
-  const { setSearch } = useSearchQuery({
-    currentPath: "/incidents",
-    query: "status",
-  });
+interface IncidentStatusTabSearchQueryProps extends UseSearchQueryParams {
+  className?: string;
+}
+
+export function IncidentStatusTabSearchQuery({
+  className,
+  ...props
+}: IncidentStatusTabSearchQueryProps) {
+  const { setSearch } = useSearchQuery(props);
 
   return (
     <TabField
+      className={className}
       data={[
         "ALL",
         IncidentStatusEnum.REPORTED,
