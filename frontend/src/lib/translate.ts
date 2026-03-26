@@ -3,6 +3,7 @@ import {
   StaffRoleEnum,
   UserRoleEnum,
 } from "@/features/auth/schemas/user.schema";
+import { IncidentStatusEnum } from "@/features/incident/schemas/incident.schema";
 
 export const translateEnum = {
   userRoleEnum: function (value: UserRoleEnum) {
@@ -42,6 +43,24 @@ export const translateEnum = {
         return "น้อย";
       case "5":
         return "น้อยมาก";
+      default:
+        return value;
+    }
+  },
+  incidentStatusEnum: function (value: IncidentStatusEnum | string) {
+    switch (value) {
+      case "REPORTED":
+        return "รอดำเนินการ";
+      case "IN_PROGRESS":
+        return "กำลังดำเนินการ";
+      case "NEED_MORE_TEAMS":
+        return "ต้องการทีมเพิ่ม";
+      case "COMPLETED":
+        return "เสร็จสิ้น";
+      case "CANCELLED":
+        return "ยกเลิก";
+      case "ALL":
+        return "ทั้งหมด";
       default:
         return value;
     }

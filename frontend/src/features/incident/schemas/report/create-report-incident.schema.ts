@@ -6,6 +6,7 @@ export const createReportIncidentSchema = z.object({
   contactPhone: z
     .string()
     .regex(/^[0-9]{9,10}$/, "เบอร์โทรต้องเป็นตัวเลข 9-10 หลัก"),
+  address: z.string(),
   location: z.object({
     lat: z.number(),
     lng: z.number(),

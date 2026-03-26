@@ -29,6 +29,9 @@ public class IncidentRequestDTO {
     @NotBlank(message = "กรุณากรอกเบอร์ติดต่อ")
     private String contactPhone;
 
+    @NotBlank(message = "กรุณากรอกที่อยู่")
+    private String address;
+
     private MultipartFile[] files;
 
     @NotNull(message = "กรุณาระบุตำแหน่ง latitude")

@@ -71,6 +71,7 @@ public class IncidentServiceImpl implements IncidentService {
         incidentToCreate.setIncidentType(incidentType);
         incidentToCreate.setDescription(dto.getDescription());
         incidentToCreate.setContactPhone(dto.getContactPhone());
+        incidentToCreate.setAddress(dto.getAddress());
         incidentToCreate.setLatitude(dto.getLatitude());
         incidentToCreate.setLongitude(dto.getLongitude());
         incidentToCreate.setStatus(IncidentStatusEnum.REPORTED);

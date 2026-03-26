@@ -16,6 +16,7 @@ export async function createReportIncidentAction(
     })(),
     description: formData.get("report-incident-description") as string,
     contactPhone: formData.get("report-incident-contact-phone") as string,
+    address: formData.get("report-incident-address") as string,
     location: JSON.parse(
       formData.get("report-incident-location") as string,
     ) as {

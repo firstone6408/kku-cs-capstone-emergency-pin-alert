@@ -40,6 +40,7 @@ export async function createReportIncident(input: ICreateReportIncident) {
     formData.append("incidentTypeId", data.incidentTypeId.toString());
     formData.append("description", data.description);
     formData.append("contactPhone", data.contactPhone);
+    formData.append("address", data.address);
     formData.append("latitude", data.location.lat.toString());
     formData.append("longitude", data.location.lng.toString());
     data.files.forEach((file) => {

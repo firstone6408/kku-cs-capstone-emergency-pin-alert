@@ -2,7 +2,7 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { useState, useEffect } from "react";
 import { useDebounce } from "./use-debounce";
 
-export function useSearchField({
+export function useSearchQuery({
   query,
   currentPath,
   defaultValues,

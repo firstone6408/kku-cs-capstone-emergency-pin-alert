@@ -72,6 +72,10 @@ export function ControlStepButton({
                 reportIncidentFormObject.contactPhone!,
               );
               formData.append(
+                "report-incident-address",
+                reportIncidentFormObject.address!,
+              );
+              formData.append(
                 "report-incident-location",
                 JSON.stringify(reportIncidentFormObject.location),
               );

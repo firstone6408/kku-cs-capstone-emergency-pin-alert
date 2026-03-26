@@ -66,6 +66,10 @@ public class IncidentEntity {
     @Column(name = "contact_phone", nullable = false)
     private String contactPhone;
 
+    // ที่อยู่ (จาก geocoding)
+    @Column(name = "address", nullable = false)
+    private String address;
+
     // พิกัด GPS สำหรับปักหมุดบนแผนที่
     @Column(name = "latitude", nullable = false, precision = 10, scale = 7)
     private BigDecimal latitude;

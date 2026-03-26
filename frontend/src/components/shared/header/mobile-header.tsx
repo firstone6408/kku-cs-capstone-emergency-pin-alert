@@ -17,7 +17,7 @@ export function MobileHeader({
   return (
     <div
       className={cn(
-        "fixed w-full backdrop-blur-sm md:rounded-t-xl px-4 py-4 gap-3 border-b border-border flex justify-between items-center",
+        "fixed z-100 w-full backdrop-blur-sm md:rounded-t-xl px-4 py-4 gap-3 border-b border-border flex justify-between items-center",
         className,
       )}
     >

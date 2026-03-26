@@ -4,6 +4,8 @@ import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.List;
 
+import com.kku.emergency_alert_api.constant.IncidentStatusEnum;
+import com.kku.emergency_alert_api.dto.incident_type.IncidentTypeResponseDTO;
 import com.kku.emergency_alert_api.entity.IncidentEntity;
 
 import lombok.Builder;
@@ -16,14 +18,14 @@ public class IncidentResponseDTO {
     private final Long id;
 
     // ข้อมูลประเภทเหตุ
-    private final String incidentTypeName;
-    private final Integer incidentTypePriorityLevel;
+    private final IncidentTypeResponseDTO incidentType;
 
     private final String description;
     private final String contactPhone;
+    private final String address;
     private final BigDecimal latitude;
     private final BigDecimal longitude;
-    private final String status;
+    private final IncidentStatusEnum status;
     private final Integer maxTeams;
 
     // หลักฐาน
@@ -35,13 +37,13 @@ public class IncidentResponseDTO {
     public static IncidentResponseDTO fromEntity(IncidentEntity entity) {
         return IncidentResponseDTO.builder()
                 .id(entity.getId())
-                .incidentTypeName(entity.getIncidentType().getName())
-                .incidentTypePriorityLevel(entity.getIncidentType().getPriorityLevel())
+                .incidentType(IncidentTypeResponseDTO.fromEntity(entity.getIncidentType()))
                 .description(entity.getDescription())
                 .contactPhone(entity.getContactPhone())
+                .address(entity.getAddress())
                 .latitude(entity.getLatitude())
                 .longitude(entity.getLongitude())
-                .status(entity.getStatus().name())
+                .status(entity.getStatus())
                 .maxTeams(entity.getMaxTeams())
                 .createdAt(entity.getCreatedAt())
                 .updatedAt(entity.getUpdatedAt())
@@ -49,7 +51,7 @@ public class IncidentResponseDTO {
                         ? entity.getEvidence().stream()
                                 .map(IncidentEvidenceResponseDTO::fromEntity)
                                 .toList()
-                        : null)
+                        : List.of())
                 .build();
     }
 }

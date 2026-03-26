@@ -1,4 +1,13 @@
+import { incidentTypeSchema } from "@/features/incident-type/schemas/incident-type.schema";
 import { z } from "zod";
+
+export enum IncidentStatusEnum {
+  REPORTED = "REPORTED",
+  IN_PROGRESS = "IN_PROGRESS",
+  NEED_MORE_TEAMS = "NEED_MORE_TEAMS",
+  COMPLETED = "COMPLETED",
+  CANCELLED = "CANCELLED",
+}
 
 const EvidenceSchema = z.object({
   id: z.number(),
@@ -11,18 +20,18 @@ const EvidenceSchema = z.object({
 export const IncidentSchema = z.object({
   id: z.number(),
 
-  incidentTypeName: z.string(),
-
-  incidentTypePriorityLevel: z.number(),
+  incidentType: incidentTypeSchema,
 
   description: z.string(),
 
   contactPhone: z.string(),
 
+  address: z.string(),
+
   latitude: z.number(),
   longitude: z.number(),
 
-  status: z.string(),
+  status: z.nativeEnum(IncidentStatusEnum),
 
   maxTeams: z.number(),
 
