@@ -1,5 +1,5 @@
 # 1. เลือก Base Image
-FROM openjdk:21-jdk
+FROM eclipse-temurin:21-jdk
 
 # 2. ตั้งค่า Working directory ภายใน Image
 WORKDIR /app
