@@ -95,7 +95,7 @@ export function AdminSidebar({ user }: AdminSidebarProps) {
           <Link href={"/"}>
             <div className="flex items-center gap-2">
               <div className="bg-primary p-1 rounded-md">
-                <span className="text-secondary font-bold">Emergency</span>
+                <span className="text-secondary font-bold">KKU Alert</span>
               </div>
               <span className="text-xl font-bold">Admin</span>
             </div>

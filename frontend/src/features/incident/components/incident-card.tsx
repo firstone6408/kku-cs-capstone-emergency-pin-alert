@@ -15,12 +15,14 @@ import { getIncidentPriorityTheme } from "@/lib/theme";
 import { Button } from "@/components/ui/button";
 import Link from "next/link";
 import { ClipboardCopy } from "lucide-react";
+import { IUser, UserRoleEnum } from "@/features/auth/schemas/user.schema";
 
 interface IncidentCardProps {
   incident: IIncident;
+  user: IUser;
 }
 
-export function IncidentCard({ incident }: IncidentCardProps) {
+export function IncidentCard({ incident, user }: IncidentCardProps) {
   const theme = getIncidentPriorityTheme(
     incident.incidentType.priorityLevel,
   );
@@ -52,11 +54,13 @@ export function IncidentCard({ incident }: IncidentCardProps) {
         </span>
         <span className="flex flex-col items-end">
           <p>{dateTime.getRelativeTime(new Date(incident.createdAt))}</p>
-          <Button variant={"default"} size={"icon-lg"} asChild>
-            <Link href={`/incidents/${incident.id}`}>
-              <ClipboardCopy />
-            </Link>
-          </Button>
+          {user.role === UserRoleEnum.STAFF && (
+            <Button variant={"default"} size={"icon-lg"} asChild>
+              <Link href={`/incidents/${incident.id}`}>
+                <ClipboardCopy />
+              </Link>
+            </Button>
+          )}
         </span>
       </CardFooter>
     </Card>

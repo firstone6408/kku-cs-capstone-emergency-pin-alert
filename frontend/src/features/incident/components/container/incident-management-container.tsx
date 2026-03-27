@@ -70,7 +70,7 @@ export function IncidentManagementContainer({
           {incidents.length > 0 ? (
             incidents.map((incident) => (
               <div key={incident.id} className="m-1">
-                <IncidentCard incident={incident} />
+                <IncidentCard incident={incident} user={user} />
               </div>
             ))
           ) : (

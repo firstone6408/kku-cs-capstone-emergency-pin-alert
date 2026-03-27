@@ -25,6 +25,7 @@ import {
 import { AcceptIncidentStaffButton } from "@/features/staff/components/incident/action/accept-incident-staff-button";
 import { ITeamStaff } from "@/features/staff/schemas/team/team-staff.schema";
 import Link from "next/link";
+import { TeamStaffCard } from "@/features/staff/components/team/team-staff-card";
 
 interface IncidentDetailContainerProps {
   className?: string;
@@ -140,13 +141,23 @@ export function IncidentDetailContainer({
           <div className="flex justify-between">
             <p className="font-semibold">ทีมที่รับภารกิจ</p>
             <p className="text-muted-foreground">
-              0 / {incident.maxTeams} ทีม
+              {incidentStaff?.assignments.length} / {incident.maxTeams} ทีม
             </p>
           </div>
 
-          <p className="text-sm text-muted-foreground text-center py-6">
-            ยังไม่มีทีมรับภารกิจ
-          </p>
+          {incidentStaff && incidentStaff?.assignments.length > 0 ? (
+            incidentStaff?.assignments.map((assignment) => (
+              <TeamStaffCard
+                key={assignment.id}
+                team={assignment.team}
+                readonly
+              />
+            ))
+          ) : (
+            <p className="text-sm text-muted-foreground text-center py-6">
+              ยังไม่มีทีมรับภารกิจ
+            </p>
+          )}
         </CardContent>
       </Card>
 

@@ -23,7 +23,11 @@ export function IncidentInProgressContainer({
   className,
   incidentDetail,
 }: IncidentInProgressContainerProps) {
+  // console.log(incidentDetail);
   const theme = getIncidentStatusTheme(incidentDetail.incident.status);
+  const canAction =
+    incidentDetail.incident.status === IncidentStatusEnum.IN_PROGRESS ||
+    incidentDetail.incident.status === IncidentStatusEnum.NEED_MORE_TEAMS;
 
   return (
     <div className={cn("p-4 space-y-4", className)}>
@@ -106,36 +110,34 @@ export function IncidentInProgressContainer({
       </Card>
 
       {/* Actions */}
-      {incidentDetail.incident.status === IncidentStatusEnum.IN_PROGRESS ||
-        (incidentDetail.incident.status ===
-          IncidentStatusEnum.NEED_MORE_TEAMS && (
-          <div className="flex justify-between items-center gap-3">
-            <div className="w-full">
-              <RequestMoreTeamsIncidentStaffButton
-                incident={incidentDetail.incident}
-                variant="outline"
-                className="flex-1 flex items-center gap-2 w-full"
-                size={"lg"}
-              >
-                <Plus className="size-4" />
-                <span>ขอทีมเพิ่ม</span>
-              </RequestMoreTeamsIncidentStaffButton>
-            </div>
-
-            <div className="w-full">
-              <CompleteIncidentStaffButton
-                incident={incidentDetail.incident}
-                className="w-full"
-                size={"lg"}
-              >
-                <span className="flex-1 flex items-center gap-2">
-                  <BookMarked className="size-4" />
-                  <span>ช่วยสำเร็จ</span>
-                </span>
-              </CompleteIncidentStaffButton>
-            </div>
+      {canAction && (
+        <div className="flex justify-between items-center gap-3">
+          <div className="w-full">
+            <RequestMoreTeamsIncidentStaffButton
+              incident={incidentDetail.incident}
+              variant="outline"
+              className="flex-1 flex items-center gap-2 w-full"
+              size={"lg"}
+            >
+              <Plus className="size-4" />
+              <span>ขอทีมเพิ่ม</span>
+            </RequestMoreTeamsIncidentStaffButton>
           </div>
-        ))}
+
+          <div className="w-full">
+            <CompleteIncidentStaffButton
+              incident={incidentDetail.incident}
+              className="w-full"
+              size={"lg"}
+            >
+              <span className="flex-1 flex items-center gap-2">
+                <BookMarked className="size-4" />
+                <span>ช่วยสำเร็จ</span>
+              </span>
+            </CompleteIncidentStaffButton>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

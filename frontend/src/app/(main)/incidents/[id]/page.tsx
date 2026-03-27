@@ -30,8 +30,6 @@ export default async function IncidentDetailPage({
     redirect(user.role === UserRoleEnum.REPORTER ? "/incidents" : "/");
   }
 
-  // console.log(incidentStaff);
-
   return (
     <div>
       {/* Header */}

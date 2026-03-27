@@ -40,6 +40,7 @@ export default async function IncidentPage({
           <IncidentContainer
             className="content-with-mobile-header"
             incidents={incidents}
+            user={user}
           />
         </Fragment>
       )}
